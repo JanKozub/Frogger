@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+#main {
+    zoom: 0.80;
+    border: 5px solid white;
+    position: absolute;
+    overflow: hidden;
+}
+
+.car {
+    position: absolute;
+}
