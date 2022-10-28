@@ -13,3 +13,11 @@ body {
 .car {
     position: absolute;
 }
+
+#life-blocker {
+    position: absolute;
+    top: 30px;
+    right: 230px;
+    height: 35px;
+    background-color: #000F00;
+}
