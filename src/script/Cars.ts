@@ -7,6 +7,7 @@ export default class Cars {
         this.createPinkCarLine();
         this.createOrangeCarLine();
         this.createBlueCarLine();
+        this.createYellowCarLine();
     }
 
     private createPinkCarLine(): void {
@@ -26,6 +27,22 @@ export default class Cars {
         for (let i = 0; i < 4; i++) {
             let car = this.createCar('car3.png', 710)
             this.moveCar(car, i * (300 + (Math.random() * 40)), Direction.LEFT, 4)
+        }
+    }
+
+    private createYellowCarLine():void {
+        for (let i = 0; i < 4; i++) {
+            let car = this.createCar('car4/car40.png', 785)
+            this.moveCar(car, i * 340, Direction.RIGHT, 6)
+
+            let c = 0;
+            setInterval(() => {
+                if (c == 3) {
+                    c = 0;
+                }
+                car.src = '../resources/cars/car4/car4' + c + '.png';
+                c++;
+            }, 75)
         }
     }
 
@@ -49,9 +66,9 @@ export default class Cars {
         }, Math.abs(speed))
     }
 
-    private createCar(filename: string, top: number): HTMLElement {
+    private createCar(filename: string, top: number): HTMLImageElement {
         let car = document.createElement('img')
-        car.src = '../resources/' + filename;
+        car.src = '../resources/cars/' + filename;
         car.draggable = false
         car.className = 'car'
         car.style.top = top + 'px'
