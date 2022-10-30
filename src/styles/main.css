@@ -4,13 +4,17 @@ body {
 }
 
 #main {
-    zoom: 0.80;
+    zoom: 0.90;
     border: 5px solid white;
     position: absolute;
     overflow: hidden;
 }
 
 .car {
+    position: absolute;
+}
+
+.log {
     position: absolute;
 }
 

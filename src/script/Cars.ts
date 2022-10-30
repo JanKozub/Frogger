@@ -12,28 +12,28 @@ export default class Cars {
 
     private createPinkCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car1.png', 570)
-            this.moveCar(car, i * 340, Direction.LEFT, 6)
+            let car = this.createCar('car1.png', 571)
+            this.moveCar(car, i * 340, Direction.LEFT, 25)
         }
     }
 
     private createOrangeCarLine(): void {
-        let car = this.createCar('car2.png', 638)
-        this.moveCar(car, 0, Direction.RIGHT, -1)
+        let car = this.createCar('car2.png', 641)
+        this.moveCar(car, 0, Direction.RIGHT, 15)
 
     }
 
-    private createBlueCarLine():void {
+    private createBlueCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car3.png', 710)
-            this.moveCar(car, i * (300 + (Math.random() * 40)), Direction.LEFT, 4)
+            let car = this.createCar('car3.png', 711)
+            this.moveCar(car, i * (300 + (Math.random() * 40)), Direction.LEFT, 18)
         }
     }
 
-    private createYellowCarLine():void {
+    private createYellowCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car4/car40.png', 785)
-            this.moveCar(car, i * 340, Direction.RIGHT, 6)
+            let car = this.createCar('car4/car40.png', 781)
+            this.moveCar(car, i * 340, Direction.RIGHT, 25)
 
             let c = 0;
             setInterval(() => {
@@ -46,7 +46,7 @@ export default class Cars {
         }
     }
 
-    private moveCar(car: HTMLElement, offset: number, direction: Direction, speed: number):void {
+    private moveCar(car: HTMLElement, offset: number, direction: Direction, speed: number): void {
         let c = 0;
         setInterval(() => {
             if (c + offset < -92) {
@@ -58,12 +58,8 @@ export default class Cars {
                 car.style.right = String(c + offset) + 'px'
             }
 
-            if (speed < 0) {
-                c = c - 4
-            } else {
-                c = c - 1;
-            }
-        }, Math.abs(speed))
+            c = c - 4;
+        }, speed)
     }
 
     private createCar(filename: string, top: number): HTMLImageElement {
