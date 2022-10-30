@@ -1,6 +1,7 @@
 import Cars from "./Cars";
 import Scoreboard from "./Scoreboard";
 import River from "./River";
+import Player from "./Player";
 
 export class Main {
     constructor() {
@@ -12,6 +13,9 @@ export class Main {
 
         let river = new River();
         river.start();
+
+        let player = new Player();
+        player.start();
     }
 }
 

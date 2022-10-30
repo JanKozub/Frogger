@@ -4,6 +4,6 @@ export default class Scoreboard {
 
     setLifeAmount(number: number) {
         document.getElementById('life-blocker')
-            .style.width = ((4 - number) * 60) + 'px'
+            .style.width = ((4 - number) * 50) + 'px'
     }
 }

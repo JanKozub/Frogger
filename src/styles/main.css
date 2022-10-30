@@ -1,13 +1,14 @@
 body {
     margin: 0;
     background-color: rgba(0, 0, 0, 0.9);
+    overflow: hidden;
 }
 
 #main {
-    zoom: 0.90;
-    border: 5px solid white;
     position: absolute;
     overflow: hidden;
+    left: 100px;
+    top: 20px;
 }
 
 .car {
@@ -20,8 +21,18 @@ body {
 
 #life-blocker {
     position: absolute;
-    top: 30px;
-    right: 230px;
+    top: 15px;
+    right: 160px;
     height: 35px;
     background-color: #000F00;
+}
+
+#player {
+    width: 46px;
+    height: 33px;
+    /*background-color: red;*/
+    position: absolute;
+    bottom: 66px;
+    left: 500px;
+    z-index: 100;
 }

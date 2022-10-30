@@ -16,35 +16,35 @@ export default class River {
 
     private create1stLogLine() {
         for (let i = 0; i < 3; i++) {
-            let log = this.createLog('log1.png', 150)
+            let log = this.createLog('log1.png', 112)
             this.moveLog(log, Direction.RIGHT, i * 475, 20)
         }
     }
 
     private create2ndLogLine() {
         for (let i = 0; i < 2; i++) {
-            let log = this.createLog('log2.png', 270)
+            let log = this.createLog('log2.png', 218)
             this.moveLog(log, Direction.RIGHT, i * 715, 5)
         }
     }
 
     private create3rdLogLine() {
         for (let i = 0; i < 4; i++) {
-            let log = this.createLog('log3.png', 400)
+            let log = this.createLog('log3.png', 271)
             this.moveLog(log, Direction.RIGHT, i * 360, 25)
         }
     }
 
     private create3turtleLine() {
         for (let i = 0; i < 4; i++) {
-            let log = this.createTurtles(3, 340)
+            let log = this.createTurtles(3, 321)
             this.moveLog(log, Direction.LEFT, i * 360, 15)
         }
     }
 
     private create4turtleLine() {
         for (let i = 0; i < 3; i++) {
-            let log = this.createTurtles(4, 210)
+            let log = this.createTurtles(4, 162)
             this.moveLog(log, Direction.LEFT, i * 400, 25)
         }
     }

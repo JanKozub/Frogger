@@ -12,27 +12,27 @@ export default class Cars {
 
     private createPinkCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car1.png', 571)
-            this.moveCar(car, i * 340, Direction.LEFT, 25)
+            let car = this.createCar('car1.png', 427)
+            this.moveCar(car, i * 340, Direction.LEFT, 30)
         }
     }
 
     private createOrangeCarLine(): void {
-        let car = this.createCar('car2.png', 641)
+        let car = this.createCar('car2.png', 480)
         this.moveCar(car, 0, Direction.RIGHT, 15)
 
     }
 
     private createBlueCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car3.png', 711)
+            let car = this.createCar('car3.png', 533)
             this.moveCar(car, i * (300 + (Math.random() * 40)), Direction.LEFT, 18)
         }
     }
 
     private createYellowCarLine(): void {
         for (let i = 0; i < 4; i++) {
-            let car = this.createCar('car4/car40.png', 781)
+            let car = this.createCar('car4/car42.png', 589)
             this.moveCar(car, i * 340, Direction.RIGHT, 25)
 
             let c = 0;
