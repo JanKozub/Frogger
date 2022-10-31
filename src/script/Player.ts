@@ -1,49 +1,52 @@
 export default class Player {
     private readonly player: HTMLElement;
+    private movementLock = false;
 
     constructor() {
         this.player = document.getElementById('player')
     }
 
-    public startMovement() {
+    public startMovement(): void {
         window.onkeydown = (k) => {
-            let img = document.getElementById('player-img') as HTMLImageElement
-            let style = getComputedStyle(this.player)
-            if (k.key === 'ArrowUp') {
-                img.src = '../resources/frog/frog1.png'
-                this.player.style.rotate = 0 + 'deg'
-                this.player.style.bottom = (parseInt(style.bottom) + 53) + 'px'
-            } else if (k.key === 'ArrowDown') {
-                img.src = '../resources/frog/frog1.png'
-                this.player.style.rotate = 180 + 'deg'
-                this.player.style.bottom = (parseInt(style.bottom) - 53) + 'px'
-            } else if (k.key === 'ArrowLeft') {
-                img.src = '../resources/frog/frog2.png'
-                this.player.style.left = (parseInt(style.left) - 68) + 'px'
-            } else if (k.key === 'ArrowRight') {
-                img.src = '../resources/frog/frog3.png'
-                this.player.style.left = (parseInt(style.left) + 68) + 'px'
-            } else {
-                this.killFrog();
+            if (!this.movementLock) {
+                let img = document.getElementById('player-img') as HTMLImageElement
+                let style = getComputedStyle(this.player)
+                if (k.key === 'ArrowUp') {
+                    img.src = '../resources/frog/frog1.png'
+                    this.player.style.rotate = 0 + 'deg'
+                    this.player.style.bottom = (parseInt(style.bottom) + 53) + 'px'
+                } else if (k.key === 'ArrowDown') {
+                    img.src = '../resources/frog/frog1.png'
+                    this.player.style.rotate = 180 + 'deg'
+                    this.player.style.bottom = (parseInt(style.bottom) - 53) + 'px'
+                } else if (k.key === 'ArrowLeft') {
+                    img.src = '../resources/frog/frog2.png'
+                    this.player.style.left = (parseInt(style.left) - 68) + 'px'
+                } else if (k.key === 'ArrowRight') {
+                    img.src = '../resources/frog/frog3.png'
+                    this.player.style.left = (parseInt(style.left) + 68) + 'px'
+                }
             }
         }
     }
 
-    public enableDeath() {
-        let interval = setInterval(() => {
-            let cars = document.getElementsByClassName('car')
-            let ps = this.player.getBoundingClientRect();
-            for (let i = 0; i < cars.length; i++) {
-                let cs = cars[i].getBoundingClientRect();
-                if (!(ps.top > cs.bottom || ps.right < cs.left || ps.bottom < cs.top || ps.left > cs.right)) {
-                    clearInterval(interval)
-                    this.killFrog()
+    public enableDeath(): void {
+        setInterval(() => {
+            if (!this.movementLock) {
+                let cars = document.getElementsByClassName('car')
+                let ps = this.player.getBoundingClientRect();
+                for (let i = 0; i < cars.length; i++) {
+                    let cs = cars[i].getBoundingClientRect();
+                    if (!(ps.top > cs.bottom || ps.right < cs.left || ps.bottom < cs.top || ps.left > cs.right)) {
+                        this.movementLock = true;
+                        this.killFrog()
+                    }
                 }
             }
         }, 10)
     }
 
-    private killFrog() {
+    private killFrog(): void {
         let img = document.getElementById('player-img') as HTMLImageElement
         let style = getComputedStyle(this.player)
         let i = 0;
@@ -69,9 +72,22 @@ export default class Player {
                 this.player.style.width = '97px'
                 this.player.style.height = '66px'
                 clearInterval(interval)
+
+                setTimeout(() => {
+                    img.src = '../resources/frog/frog1.png'
+                    this.resetFrog();
+                    this.movementLock = false;
+                }, 1500)
             }
 
             i++;
         }, 100)
+    }
+
+    private resetFrog(): void {
+        this.player.style.width = '46px'
+        this.player.style.height = '33px'
+        this.player.style.left = '500px'
+        this.player.style.bottom = '66px'
     }
 }
