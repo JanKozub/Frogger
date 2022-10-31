@@ -15,7 +15,8 @@ export class Main {
         river.start();
 
         let player = new Player();
-        player.start();
+        player.startMovement();
+        player.enableDeath();
     }
 }
 
