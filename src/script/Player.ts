@@ -1,6 +1,7 @@
 export default class Player {
     private readonly player: HTMLElement;
     private movementLock = false;
+    private collisionStartPointLeft = -1;
 
     constructor() {
         this.player = document.getElementById('player')
@@ -33,13 +34,24 @@ export default class Player {
     public enableDeath(): void {
         setInterval(() => {
             if (!this.movementLock) {
-                let cars = document.getElementsByClassName('car')
+                let objects:any = [];
+                objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("car"));
+                objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("river-obj"));
                 let ps = this.player.getBoundingClientRect();
-                for (let i = 0; i < cars.length; i++) {
-                    let cs = cars[i].getBoundingClientRect();
+                for (let i = 0; i < objects.length; i++) {
+                    let cs = objects[i].getBoundingClientRect();
                     if (!(ps.top > cs.bottom || ps.right < cs.left || ps.bottom < cs.top || ps.left > cs.right)) {
-                        this.movementLock = true;
-                        this.killFrog()
+                        if (this.collisionStartPointLeft == -1)
+                            this.collisionStartPointLeft = ps.left
+
+                        if (objects[i].className == 'car') {
+                            this.movementLock = true;
+                            this.killFrog()
+                        } else {
+                            this.followLog(objects[i]);
+                        }
+                    } else {
+                        this.collisionStartPointLeft = -1;
                     }
                 }
             }
@@ -82,6 +94,11 @@ export default class Player {
 
             i++;
         }, 100)
+    }
+
+    private followLog(log: HTMLImageElement) {
+        console.log(this.collisionStartPointLeft)
+        this.player.style.left = (parseInt(getComputedStyle(log).left)) + 'px'
     }
 
     private resetFrog(): void {

@@ -1,83 +1,96 @@
 import {Direction} from "./types/Direction";
 
 export default class River {
-    private disappearBorder = 1425;
-
-    constructor() {
-    }
-
     public start(): void {
-        this.create1stLogLine();
-        this.create2ndLogLine();
-        this.create3rdLogLine();
-        this.create4turtleLine();
-        this.create3turtleLine();
+        this.create1stLogLine(35);
+        this.create2ndLogLine(10);
+        this.create3rdLogLine(25);
+        this.create4turtleLine(20);
+        this.create3turtleLine(40);
     }
 
-    private create1stLogLine() {
+    private create1stLogLine(speed: number): void {
         for (let i = 0; i < 3; i++) {
             let log = this.createLog('log1.png', 112)
-            this.moveLog(log, Direction.RIGHT, i * 475, 20)
+            this.moveObject(log, Direction.RIGHT, i * 366, speed, 875)
         }
     }
 
-    private create2ndLogLine() {
+    private create2ndLogLine(speed: number): void {
         for (let i = 0; i < 2; i++) {
             let log = this.createLog('log2.png', 218)
-            this.moveLog(log, Direction.RIGHT, i * 715, 5)
+            this.moveObject(log, Direction.RIGHT, i * 525, speed, 650)
         }
     }
 
-    private create3rdLogLine() {
+    private create3rdLogLine(speed: number): void {
         for (let i = 0; i < 4; i++) {
             let log = this.createLog('log3.png', 271)
-            this.moveLog(log, Direction.RIGHT, i * 360, 25)
+            this.moveObject(log, Direction.RIGHT, i * 265, speed, 875)
         }
     }
 
-    private create3turtleLine() {
-        for (let i = 0; i < 4; i++) {
-            let log = this.createTurtles(3, 321)
-            this.moveLog(log, Direction.LEFT, i * 360, 15)
-        }
-    }
-
-    private create4turtleLine() {
+    private create4turtleLine(speed: number): void {
         for (let i = 0; i < 3; i++) {
-            let log = this.createTurtles(4, 162)
-            this.moveLog(log, Direction.LEFT, i * 400, 25)
+            let turtles = this.createTurtles(4, 162)
+            this.moveObject(turtles, Direction.LEFT, i * 380, speed, 875)
         }
     }
 
-    private moveLog(log: HTMLImageElement, direction: Direction, offset: number, speed: number) {
-        let nlog = this.createLog(log.src.split('/')[6], parseInt(log.style.top))
-        nlog.style.left = '-1000px'
+    private create3turtleLine(speed: number): void {
+        for (let i = 0; i < 3; i++) {
+            let turtles = this.createTurtles(3, 321)
+            this.moveObject(turtles, Direction.LEFT, i * 360, speed, 875)
+        }
+    }
+
+    private moveObject(obj: HTMLImageElement, direction: Direction, offset: number, speed: number, border: number): void {
         let c = offset;
 
+        let nObj: HTMLImageElement;
+        if (direction == Direction.RIGHT) {
+            nObj = this.createLog(obj.src.split('/')[6], parseInt(obj.style.top))
+            nObj.style.left = '-1000px'
+        } else {
+            nObj = this.createTurtles(parseInt(obj.src.charAt(obj.src.length - 6)), parseInt(obj.style.top))
+            nObj.style.right = '-1000px'
+        }
+
         setInterval(() => {
-            if (c > (this.disappearBorder - log.width)) {
-                nlog.style.left = ((this.disappearBorder - c) * -1) + 'px'
+            let posOfnObj = (((border - c) * -1) - obj.width);
+            if (c > border) {
+                if (direction == Direction.RIGHT) {
+                    nObj.style.left = posOfnObj + 'px'
+                } else {
+                    nObj.style.right = posOfnObj + 'px'
+                }
             }
 
-            if (c > this.disappearBorder) {
-                c = 0;
-                nlog.style.left = '-1000px'
+            if (posOfnObj > 0) {
+                c = posOfnObj;
+                if (direction == Direction.RIGHT) {
+                    nObj.style.left = '-1000px'
+                } else {
+                    nObj.style.right = '-1000px'
+                }
             }
-            log.style.left = c + 'px'
 
             if (direction == Direction.RIGHT) {
-                c = c + 4;
+                obj.style.left = c + 'px'
             } else {
-                c = c - 4;
+                obj.style.right = c + 'px'
             }
+
+            c = c + 5;
         }, speed)
     }
 
     private createTurtles(type: number, top: number): HTMLImageElement {
         let turtles = document.createElement('img')
         turtles.draggable = false
-        turtles.className = 'log'
+        turtles.className = 'river-obj'
         turtles.style.top = top + 'px'
+        turtles.src = '../resources/logs/turtle/turtle' + type + '1.png'
 
         let c = 1;
         setInterval(() => {
@@ -97,7 +110,7 @@ export default class River {
         let log = document.createElement('img')
         log.src = '../resources/logs/' + filename;
         log.draggable = false
-        log.className = 'log'
+        log.className = 'river-obj'
         log.style.top = top + 'px'
         document.getElementById('main').append(log)
         return log
