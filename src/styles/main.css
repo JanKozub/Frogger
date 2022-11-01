@@ -2,13 +2,14 @@ body {
     margin: 0;
     background-color: rgba(0, 0, 0, 0.9);
     overflow: hidden;
+    display: flex;
+    justify-content: center;
 }
 
 #main {
     position: absolute;
     overflow: hidden;
-    left: 100px;
-    top: 20px;
+    top: 30px;
 }
 
 .car {
