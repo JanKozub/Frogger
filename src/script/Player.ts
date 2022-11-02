@@ -1,6 +1,8 @@
 import CollisionObject from "./interfaces/CollisionObject";
+import Movement from "./Movement";
 
 export default class Player {
+    private readonly COLLISION_CLASSES = ['car', 'river-obj'];
     private readonly player: HTMLElement;
     private movementLock = false;
     private lastObj: CollisionObject;
@@ -13,53 +15,36 @@ export default class Player {
     public startMovement(): void {
         window.onkeydown = (k) => {
             if (!this.movementLock) {
-                let img = document.getElementById('player-img') as HTMLImageElement
-                let style = getComputedStyle(this.player)
-                if (k.key === 'ArrowUp') {
-                    img.src = '../resources/frog/frog1.png'
-                    this.player.style.rotate = 0 + 'deg'
-                    this.player.style.bottom = (parseInt(style.bottom) + 53) + 'px'
-                } else if (k.key === 'ArrowDown') {
-                    img.src = '../resources/frog/frog1.png'
-                    this.player.style.rotate = 180 + 'deg'
-                    this.player.style.bottom = (parseInt(style.bottom) - 53) + 'px'
-                } else if (k.key === 'ArrowLeft') {
-                    img.src = '../resources/frog/frog2.png'
-                    this.player.style.left = (parseInt(style.left) - 68) + 'px'
-                } else if (k.key === 'ArrowRight') {
-                    img.src = '../resources/frog/frog3.png'
-                    this.player.style.left = (parseInt(style.left) + 68) + 'px'
-                }
+                if (k.key === 'ArrowUp') Movement.goUp();
+                else if (k.key === 'ArrowDown') Movement.goDown();
+                else if (k.key === 'ArrowLeft') Movement.goLeft()
+                else if (k.key === 'ArrowRight') Movement.goRight()
             }
         }
     }
 
     public enableCollision(): void {
         setInterval(() => {
-            if (!this.movementLock) {
-                let objects: any = [];
-                objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("car"));
-                objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("river-obj"));
-                let ps = this.player.getBoundingClientRect();
-                for (let i = 0; i < objects.length; i++) {
-                    let cs = objects[i].getBoundingClientRect();
-                    if (!(ps.top > cs.bottom || ps.right < cs.left || ps.bottom < cs.top || ps.left > cs.right)) {
-                        if (objects[i].className == 'car') {
+            let objects = this.getCollisionObject();
+            for (let i = 0; i < objects.length; i++) {
+                if (this.doesObjectsCollide(this.player, objects[i])) {
+                    if (objects[i].className == 'car') {
+                        if (!this.movementLock) {
                             this.movementLock = true;
                             this.killFrog()
-                        } else {
-                            if (!this.frogLock) {
-                                this.lastObj = {element: objects[i], index: i, offset: ps.left - cs.left}
-                                this.frogLock = true
-                            }
-
-                            this.followLog(objects[i]);
                         }
                     } else {
-                        if (this.frogLock && this.lastObj.index == i) {
-                            this.frogLock = false;
-                            this.lastObj = undefined;
+                        if (!this.frogLock) {
+                            let offset = this.player.offsetLeft - objects[i].offsetLeft
+                            this.lastObj = {element: objects[i], index: i, offset: offset}
+                            this.frogLock = true
                         }
+                        this.followLog(objects[i]);
+                    }
+                } else {
+                    if (this.frogLock && this.lastObj.index == i) {
+                        this.frogLock = false;
+                        this.lastObj = undefined;
                     }
                 }
             }
@@ -68,6 +53,7 @@ export default class Player {
 
     private killFrog(): void {
         let img = document.getElementById('player-img') as HTMLImageElement
+        this.player.style.rotate = '0deg'
         let style = getComputedStyle(this.player)
         let i = 0;
         let interval = setInterval(() => {
@@ -106,6 +92,21 @@ export default class Player {
 
     private followLog(log: HTMLImageElement) {
         this.player.style.left = (parseInt(getComputedStyle(log).left) + this.lastObj.offset) + 'px'
+    }
+
+    private getCollisionObject() {
+        let objects = [];
+        for (let i = 0; i < this.COLLISION_CLASSES.length; i++) {
+            objects = Array.prototype.concat
+                .apply(objects, document.getElementsByClassName(this.COLLISION_CLASSES[i]));
+        }
+        return objects;
+    }
+
+    private doesObjectsCollide(o1: HTMLElement, o2: HTMLElement) {
+        let o1B = o1.getBoundingClientRect();
+        let o2B = o2.getBoundingClientRect();
+        return !(o1B.top > o2B.bottom || o1B.right < o2B.left || o1B.bottom < o2B.top || o1B.left > o2B.right)
     }
 
     private resetFrog(): void {
