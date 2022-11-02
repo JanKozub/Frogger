@@ -1,5 +1,6 @@
 import CollisionObject from "./interfaces/CollisionObject";
 import Movement from "./Movement";
+import Animations from "./Animations";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
@@ -52,42 +53,10 @@ export default class Player {
     }
 
     private killFrog(): void {
-        let img = document.getElementById('player-img') as HTMLImageElement
-        this.player.style.rotate = '0deg'
-        let style = getComputedStyle(this.player)
-        let i = 0;
-        let interval = setInterval(() => {
-            img.src = '../resources/frog/death-road/death-road-' + i + '.png'
-
-            if (i == 0) {
-                this.player.style.left = (parseInt(style.left) - 5) + 'px'
-                this.player.style.bottom = (parseInt(style.bottom) - 1) + 'px'
-                this.player.style.width = '56px'
-                this.player.style.height = '34px'
-            } else if (i == 2) {
-                this.player.style.left = (parseInt(style.left) - 6) + 'px'
-                this.player.style.bottom = (parseInt(style.bottom) - 3) + 'px'
-                this.player.style.width = '68px'
-                this.player.style.height = '40px'
-            } else if (i == 3 || i == 3) {
-                this.player.style.left = (parseInt(style.left) - 6) + 'px'
-                this.player.style.width = '80px'
-            } else if (i == 4) {
-                this.player.style.left = (parseInt(style.left) - 8) + 'px'
-                this.player.style.bottom = (parseInt(style.bottom) - 16) + 'px'
-                this.player.style.width = '97px'
-                this.player.style.height = '66px'
-                clearInterval(interval)
-
-                setTimeout(() => {
-                    img.src = '../resources/frog/frog1.png'
-                    this.resetFrog();
-                    this.movementLock = false;
-                }, 1500)
-            }
-
-            i++;
-        }, 100)
+        Animations.roadDeath(this.player)
+        setTimeout(() => {
+            this.movementLock = false;
+        }, 1900)
     }
 
     private followLog(log: HTMLImageElement) {
@@ -107,12 +76,5 @@ export default class Player {
         let o1B = o1.getBoundingClientRect();
         let o2B = o2.getBoundingClientRect();
         return !(o1B.top > o2B.bottom || o1B.right < o2B.left || o1B.bottom < o2B.top || o1B.left > o2B.right)
-    }
-
-    private resetFrog(): void {
-        this.player.style.width = '46px'
-        this.player.style.height = '33px'
-        this.player.style.left = '500px'
-        this.player.style.bottom = '66px'
     }
 }
