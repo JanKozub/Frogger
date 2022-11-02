@@ -16,7 +16,7 @@ export class Main {
 
         let player = new Player();
         player.startMovement();
-        player.enableDeath();
+        player.enableCollision();
     }
 }
 

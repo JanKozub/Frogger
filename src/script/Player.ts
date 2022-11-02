@@ -1,7 +1,10 @@
+import CollisionObject from "./interfaces/CollisionObject";
+
 export default class Player {
     private readonly player: HTMLElement;
     private movementLock = false;
-    private collisionStartPointLeft = -1;
+    private lastObj: CollisionObject;
+    private frogLock = false;
 
     constructor() {
         this.player = document.getElementById('player')
@@ -31,27 +34,32 @@ export default class Player {
         }
     }
 
-    public enableDeath(): void {
+    public enableCollision(): void {
         setInterval(() => {
             if (!this.movementLock) {
-                let objects:any = [];
+                let objects: any = [];
                 objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("car"));
                 objects = Array.prototype.concat.apply(objects, document.getElementsByClassName("river-obj"));
                 let ps = this.player.getBoundingClientRect();
                 for (let i = 0; i < objects.length; i++) {
                     let cs = objects[i].getBoundingClientRect();
                     if (!(ps.top > cs.bottom || ps.right < cs.left || ps.bottom < cs.top || ps.left > cs.right)) {
-                        if (this.collisionStartPointLeft == -1)
-                            this.collisionStartPointLeft = ps.left
-
                         if (objects[i].className == 'car') {
                             this.movementLock = true;
                             this.killFrog()
                         } else {
+                            if (!this.frogLock) {
+                                this.lastObj = {element: objects[i], index: i, offset: ps.left - cs.left}
+                                this.frogLock = true
+                            }
+
                             this.followLog(objects[i]);
                         }
                     } else {
-                        this.collisionStartPointLeft = -1;
+                        if (this.frogLock && this.lastObj.index == i) {
+                            this.frogLock = false;
+                            this.lastObj = undefined;
+                        }
                     }
                 }
             }
@@ -97,8 +105,7 @@ export default class Player {
     }
 
     private followLog(log: HTMLImageElement) {
-        console.log(this.collisionStartPointLeft)
-        this.player.style.left = (parseInt(getComputedStyle(log).left)) + 'px'
+        this.player.style.left = (parseInt(getComputedStyle(log).left) + this.lastObj.offset) + 'px'
     }
 
     private resetFrog(): void {

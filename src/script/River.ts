@@ -89,6 +89,7 @@ export default class River {
         let turtles = document.createElement('img')
         turtles.draggable = false
         turtles.className = 'river-obj'
+        turtles.id = (Math.random() * 100000) + '';
         turtles.style.top = top + 'px'
         turtles.src = '../resources/logs/turtle/turtle' + type + '1.png'
 
