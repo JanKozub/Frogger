@@ -1,47 +1,35 @@
 import {Direction} from "./types/Direction";
+import Animations from "./Animations";
+import Log from "./interfaces/Log";
 
 export default class River {
+    private readonly log1: Log = {top: 112, offset: 366, border: 875, speed: 35, amount: 3}
+    private readonly log2: Log = {top: 218, offset: 525, border: 650, speed: 10, amount: 2}
+    private readonly log3: Log = {top: 271, offset: 265, border: 875, speed: 25, amount: 4}
+    private readonly logs: Log[] = [this.log1, this.log2, this.log3]
+
+    private readonly turtles1: Turtles = {top: 162, offset: 380, border: 875, speed: 20, type: 4}
+    private readonly turtles2: Turtles = {top: 321, offset: 360, border: 875, speed: 40, type: 3}
+    private readonly turtles: Turtles[] = [this.turtles1, this.turtles2]
+
     public start(): void {
-        this.create1stLogLine(35);
-        this.create2ndLogLine(10);
-        this.create3rdLogLine(25);
-        this.create4turtleLine(20);
-        this.create3turtleLine(40);
+        this.createObjects();
     }
 
-    private create1stLogLine(speed: number): void {
-        for (let i = 0; i < 3; i++) {
-            let log = this.createLog('log1.png', 112)
-            this.moveObject(log, Direction.RIGHT, i * 366, speed, 875)
-        }
-    }
+    private createObjects(): void {
+        this.logs.forEach((log, idx) => {
+            for (let i = 0; i < log.amount; i++) {
+                let logEl = this.createLog('log' + (idx + 1) + '.png', log.top)
+                this.moveObject(logEl, Direction.RIGHT, i * log.offset, log.speed, log.border)
+            }
+        })
 
-    private create2ndLogLine(speed: number): void {
-        for (let i = 0; i < 2; i++) {
-            let log = this.createLog('log2.png', 218)
-            this.moveObject(log, Direction.RIGHT, i * 525, speed, 650)
-        }
-    }
-
-    private create3rdLogLine(speed: number): void {
-        for (let i = 0; i < 4; i++) {
-            let log = this.createLog('log3.png', 271)
-            this.moveObject(log, Direction.RIGHT, i * 265, speed, 875)
-        }
-    }
-
-    private create4turtleLine(speed: number): void {
-        for (let i = 0; i < 3; i++) {
-            let turtles = this.createTurtles(4, 162)
-            this.moveObject(turtles, Direction.LEFT, i * 380, speed, 875)
-        }
-    }
-
-    private create3turtleLine(speed: number): void {
-        for (let i = 0; i < 3; i++) {
-            let turtles = this.createTurtles(3, 321)
-            this.moveObject(turtles, Direction.LEFT, i * 360, speed, 875)
-        }
+        this.turtles.forEach(turtle => {
+            for (let i = 0; i < 3; i++) {
+                let turtles = this.createTurtles(turtle.type, turtle.top)
+                this.moveObject(turtles, Direction.LEFT, i * turtle.offset, turtle.speed, turtle.border)
+            }
+        })
     }
 
     private moveObject(obj: HTMLImageElement, direction: Direction, offset: number, speed: number, border: number): void {
@@ -93,16 +81,7 @@ export default class River {
         turtles.style.top = top + 'px'
         turtles.src = '../resources/logs/turtle/turtle' + type + '1.png'
 
-        let c = 1;
-        setInterval(() => {
-            if (c == 5) {
-                c = 1;
-            }
-
-            turtles.src = '../resources/logs/turtle/turtle' + type + '' + c + '.png'
-            c++;
-        }, 200)
-
+        Animations.animateTurtles(turtles, type)
         document.getElementById('main').append(turtles)
         return turtles
     }

@@ -1,6 +1,7 @@
-import CollisionObject from "./interfaces/CollisionObject";
+import CollisionObject from "../interfaces/CollisionObject";
 import Movement from "./Movement";
-import Animations from "./Animations";
+import Animations from "../Animations";
+import Scoreboard from "../Scoreboard";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
@@ -8,18 +9,30 @@ export default class Player {
     private movementLock = false;
     private lastObj: CollisionObject;
     private frogLock = false;
+    private movement: Movement;
+    private life = 4
 
     constructor() {
+        this.movement = new Movement(this);
         this.player = document.getElementById('player')
     }
 
     public startMovement(): void {
         window.onkeydown = (k) => {
             if (!this.movementLock) {
-                if (k.key === 'ArrowUp') Movement.goUp();
-                else if (k.key === 'ArrowDown') Movement.goDown();
-                else if (k.key === 'ArrowLeft') Movement.goLeft()
-                else if (k.key === 'ArrowRight') Movement.goRight()
+                if (k.key === 'ArrowUp') this.movement.goUp();
+                else if (k.key === 'ArrowDown') this.movement.goDown();
+                else if (k.key === 'ArrowLeft') {
+                    if (parseInt(getComputedStyle(this.player).left) < 0) {
+                        this.killFrog();
+                    }
+                    this.movement.goLeft()
+                } else if (k.key === 'ArrowRight') {
+                    if (parseInt(getComputedStyle(this.player).left) > 954) {
+                        this.killFrog();
+                    }
+                    this.movement.goRight()
+                }
             }
         }
     }
@@ -31,7 +44,6 @@ export default class Player {
                 if (this.doesObjectsCollide(this.player, objects[i])) {
                     if (objects[i].className == 'car') {
                         if (!this.movementLock) {
-                            this.movementLock = true;
                             this.killFrog()
                         }
                     } else {
@@ -53,10 +65,15 @@ export default class Player {
     }
 
     private killFrog(): void {
+        this.movementLock = true;
         Animations.roadDeath(this.player)
         setTimeout(() => {
             this.movementLock = false;
-        }, 1900)
+            this.movement.resetFrog(this.player);
+
+            this.life = this.life - 1
+            Scoreboard.setLifeAmount(this.life)
+        }, 2000)
     }
 
     private followLog(log: HTMLImageElement) {
@@ -76,5 +93,9 @@ export default class Player {
         let o1B = o1.getBoundingClientRect();
         let o2B = o2.getBoundingClientRect();
         return !(o1B.top > o2B.bottom || o1B.right < o2B.left || o1B.bottom < o2B.top || o1B.left > o2B.right)
+    }
+
+    public setLockMovement(state: boolean) {
+        this.movementLock = state; //TODO fix spam left button bug
     }
 }

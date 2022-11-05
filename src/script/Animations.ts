@@ -30,17 +30,21 @@ export default class Animations {
 
                 setTimeout(() => {
                     img.src = '../resources/frog/frog1.png'
-                    this.resetFrog(playerEl);
                 }, 1500)
             }
             i++;
         }, 100)
     }
 
-    private static resetFrog(player: HTMLElement): void {
-        player.style.width = '46px'
-        player.style.height = '33px'
-        player.style.left = '500px'
-        player.style.bottom = '66px'
+    public static animateTurtles(turtles: HTMLImageElement, type: number): void {
+        let c = 1;
+        setInterval(() => {
+            if (c == 5) {
+                c = 1;
+            }
+
+            turtles.src = '../resources/logs/turtle/turtle' + type + '' + c + '.png'
+            c++;
+        }, 200)
     }
 }
