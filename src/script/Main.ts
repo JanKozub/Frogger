@@ -4,8 +4,8 @@ import Player from "./player/Player";
 
 export class Main {
     constructor() {
-        // let cars = new Cars();
-        // cars.start();
+        let cars = new Cars();
+        cars.start();
 
         let river = new River();
         river.start();

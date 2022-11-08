@@ -47,4 +47,16 @@ export default class Animations {
             c++;
         }, 200)
     }
+
+    public static animateOrangeCar(car: HTMLImageElement) {
+        let c = 0;
+        car.src = '../resources/cars/car4/car42.png';
+        setInterval(() => {
+            if (c == 3) {
+                c = 0;
+            }
+            car.src = '../resources/cars/car4/car4' + c + '.png';
+            c++;
+        }, 75)
+    }
 }

@@ -3,87 +3,61 @@ import Animations from "./Animations";
 import Log from "./interfaces/Log";
 
 export default class River {
-    private readonly log1: Log = {index: 1, top: 112, offset: 366, border: 875, speed: 35, amount: 3}
-    private readonly log2: Log = {index: 2, top: 218, offset: 525, border: 650, speed: 10, amount: 2}
-    private readonly log3: Log = {index: 3, top: 271, offset: 265, border: 875, speed: 25, amount: 4}
-    private readonly logs: Log[] = [this.log1]
+    private readonly log1: Log = {top: 112, offset: 360, border: 850, speed: 1, amount: 3}
+    private readonly log2: Log = {top: 218, offset: 524, border: 650, speed: 2, amount: 2}
+    private readonly log3: Log = {top: 271, offset: 265, border: 875, speed: 1, amount: 4}
+    private readonly logs: Log[] = [this.log1, this.log2, this.log3]
 
-    private readonly turtles1: Turtles = {top: 162, offset: 380, border: 875, speed: 20, type: 4}
-    private readonly turtles2: Turtles = {top: 321, offset: 360, border: 875, speed: 40, type: 3}
+    private readonly turtles1: Turtles = {top: 162, offset: 380, border: 875, speed: 1, type: 4}
+    private readonly turtles2: Turtles = {top: 321, offset: 360, border: 875, speed: 1, type: 3}
     private readonly turtles: Turtles[] = [this.turtles1, this.turtles2]
 
     public start(): void {
-        this.createObjects();
-    }
-
-    private createObjects(): void {
-        let logs: Object[] = []
         this.logs.forEach((log, idx) => {
             for (let i = 0; i < log.amount; i++) {
-                console.log(i)
-                let logEl = this.createLog('log' + log.index + '.png', log.top)
-                logs.push({logEl: logEl, log: log})
+                let log1 = this.createLog('log' + (idx + 1) + '.png', log.top)
+                let log2 = this.createLog('log' + (idx + 1) + '.png', log.top)
+
+                this.startMove(log1, log2, (i * log.offset), log.border, log.speed, Direction.RIGHT)
             }
         })
 
-        window.requestAnimationFrame(() => this.startClock(0, logs))
+        this.turtles.forEach(turtle => {
+            for (let i = 0; i < 3; i++) {
+                let turtles1 = this.createTurtles(turtle.type, turtle.top)
+                let turtles2 = this.createTurtles(turtle.type, turtle.top)
 
-        //
-        // this.turtles.forEach(turtle => {
-        //     for (let i = 0; i < 3; i++) {
-        //         let turtles = this.createTurtles(turtle.type, turtle.top)
-        //         this.moveObject(turtles, Direction.LEFT, i * turtle.offset, turtle.speed, turtle.border)
-        //     }
-        // })
-
+                this.startMove(turtles1, turtles2, (i * turtle.offset), turtle.border, turtle.speed, Direction.LEFT)
+            }
+        })
     }
 
-    private startClock(a: number, logs: Object[]) {
+    private startMove(obj1: HTMLImageElement, obj2: HTMLImageElement, offset:number, border: number, speed: number, direction: Direction) {
+        let objWidth = obj1.naturalWidth * -1;
 
-
-        window.requestAnimationFrame(() => this.startClock(a + 1, logs))
+        window.requestAnimationFrame(() =>
+            this.moveObj(objWidth + offset,border + offset, obj1, obj2, objWidth, border, speed, direction))
     }
 
-
-    private moveObject(obj: HTMLImageElement, direction: Direction, offset: number, speed: number, border: number): void {
-        let c = offset;
-
-        let nObj: HTMLImageElement;
+    private moveObj(a: number, b: number, obj1: HTMLImageElement, obj2: HTMLImageElement,
+                    objWidth: number, border: number, speed: number, direction: Direction) {
         if (direction == Direction.RIGHT) {
-            nObj = this.createLog(obj.src.split('/')[6], parseInt(obj.style.top))
-            nObj.style.left = '-1000px'
+            obj1.style.left = a + 'px'
+            obj2.style.left = b + 'px'
         } else {
-            nObj = this.createTurtles(parseInt(obj.src.charAt(obj.src.length - 6)), parseInt(obj.style.top))
-            nObj.style.right = '-1000px'
+            obj1.style.right = a + 'px'
+            obj2.style.right = b + 'px'
         }
 
-        setInterval(() => {
-            let posOfnObj = (((border - c) * -1) - obj.width);
-            if (c > border) {
-                if (direction == Direction.RIGHT) {
-                    nObj.style.left = posOfnObj + 'px'
-                } else {
-                    nObj.style.right = posOfnObj + 'px'
-                }
-            }
+        if (a == border)
+            b = objWidth;
 
-            if (posOfnObj > 0) {
-                c = posOfnObj;
-                if (direction == Direction.RIGHT) {
-                    nObj.style.left = '-1000px'
-                } else {
-                    nObj.style.right = '-1000px'
-                }
-            }
+        if (b == border)
+            a = objWidth;
 
-            if (direction == Direction.RIGHT) {
-                obj.style.left = c + 'px'
-            } else {
-                obj.style.right = c + 'px'
-            }
-
-            c = c + 5;
-        }, speed)
+        a = a + speed;
+        b = b + speed;
+        window.requestAnimationFrame(() => this.moveObj(a, b, obj1, obj2, objWidth, border, speed, direction))
     }
 
     private createTurtles(type: number, top: number): HTMLImageElement {
