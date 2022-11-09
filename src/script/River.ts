@@ -15,32 +15,33 @@ export default class River {
     public start(): void {
         this.logs.forEach((log, idx) => {
             for (let i = 0; i < log.amount; i++) {
-                let log1 = this.createLog('log' + (idx + 1) + '.png', log.top)
-                let log2 = this.createLog('log' + (idx + 1) + '.png', log.top)
+                let log1 = this.createLog('log' + (idx + 1) + '.png', log)
+                let log2 = this.createLog('log' + (idx + 1) + '.png', log)
 
-                this.startMove(log1, log2, (i * log.offset), log.border, log.speed, Direction.RIGHT)
+                this.startMove(log1, log2, (i * log.offset), log, Direction.RIGHT)
             }
         })
 
         this.turtles.forEach(turtle => {
             for (let i = 0; i < 3; i++) {
-                let turtles1 = this.createTurtles(turtle.type, turtle.top)
-                let turtles2 = this.createTurtles(turtle.type, turtle.top)
+                let turtles1 = this.createTurtles(turtle.type, turtle)
+                let turtles2 = this.createTurtles(turtle.type, turtle)
 
-                this.startMove(turtles1, turtles2, (i * turtle.offset), turtle.border, turtle.speed, Direction.LEFT)
+                this.startMove(turtles1, turtles2, (i * turtle.offset), turtle, Direction.LEFT)
             }
         })
     }
 
-    private startMove(obj1: HTMLImageElement, obj2: HTMLImageElement, offset:number, border: number, speed: number, direction: Direction) {
+    //TODO create interface with 4 fields {obj1: HTML.., x1:number, obj2:HTML..., x2:number} and update this method signature
+    private startMove(obj1: HTMLImageElement, obj2: HTMLImageElement, offset: number, obj: Log | Turtles, direction: Direction) {
         let objWidth = obj1.naturalWidth * -1;
 
         window.requestAnimationFrame(() =>
-            this.moveObj(objWidth + offset,border + offset, obj1, obj2, objWidth, border, speed, direction))
+            this.moveObj(objWidth + offset, obj.border + offset, obj1, obj2, objWidth, obj, direction))
     }
 
     private moveObj(a: number, b: number, obj1: HTMLImageElement, obj2: HTMLImageElement,
-                    objWidth: number, border: number, speed: number, direction: Direction) {
+                    objWidth: number, obj: Log | Turtles, direction: Direction) {
         if (direction == Direction.RIGHT) {
             obj1.style.left = a + 'px'
             obj2.style.left = b + 'px'
@@ -49,37 +50,37 @@ export default class River {
             obj2.style.right = b + 'px'
         }
 
-        if (a == border)
+        if (a == obj.border)
             b = objWidth;
 
-        if (b == border)
+        if (b == obj.border)
             a = objWidth;
 
-        a = a + speed;
-        b = b + speed;
-        window.requestAnimationFrame(() => this.moveObj(a, b, obj1, obj2, objWidth, border, speed, direction))
+        a = a + obj.speed;
+        b = b + obj.speed;
+        window.requestAnimationFrame(() => this.moveObj(a, b, obj1, obj2, objWidth, obj, direction))
     }
 
-    private createTurtles(type: number, top: number): HTMLImageElement {
-        let turtles = document.createElement('img')
-        turtles.draggable = false
-        turtles.className = 'river-obj'
-        turtles.id = (Math.random() * 100000) + '';
-        turtles.style.top = top + 'px'
-        turtles.src = '../resources/logs/turtle/turtle' + type + '1.png'
+    private createTurtles(type: number, turtles: Turtles): HTMLImageElement {
+        let turtlesEl = document.createElement('img')
+        turtlesEl.draggable = false
+        turtlesEl.className = 'river-obj left-' + turtles.speed
+        turtlesEl.id = (Math.random() * 100000) + '';
+        turtlesEl.style.top = turtles.top + 'px'
+        turtlesEl.src = '../resources/logs/turtle/turtle' + type + '1.png'
 
-        Animations.animateTurtles(turtles, type)
-        document.getElementById('main').append(turtles)
-        return turtles
+        Animations.animateTurtles(turtlesEl, type)
+        document.getElementById('main').append(turtlesEl)
+        return turtlesEl
     }
 
-    private createLog(filename: string, top: number): HTMLImageElement {
-        let log = document.createElement('img')
-        log.src = '../resources/logs/' + filename;
-        log.draggable = false
-        log.className = 'river-obj'
-        log.style.top = top + 'px'
-        document.getElementById('main').append(log)
-        return log
+    private createLog(filename: string, log: Log): HTMLImageElement {
+        let logEl = document.createElement('img')
+        logEl.src = '../resources/logs/' + filename;
+        logEl.draggable = false
+        logEl.className = 'river-obj right-' + log.speed
+        logEl.style.top = log.top + 'px'
+        document.getElementById('main').append(logEl)
+        return logEl
     }
 }
