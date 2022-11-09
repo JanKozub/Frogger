@@ -1,6 +1,7 @@
 import {Direction} from "./types/Direction";
 import Animations from "./Animations";
 import Log from "./interfaces/Log";
+import MovingObject from "./interfaces/MovingObject";
 
 export default class River {
     private readonly log1: Log = {top: 112, offset: 360, border: 850, speed: 1, amount: 3}
@@ -15,50 +16,51 @@ export default class River {
     public start(): void {
         this.logs.forEach((log, idx) => {
             for (let i = 0; i < log.amount; i++) {
-                let log1 = this.createLog('log' + (idx + 1) + '.png', log)
-                let log2 = this.createLog('log' + (idx + 1) + '.png', log)
-
-                this.startMove(log1, log2, (i * log.offset), log, Direction.RIGHT)
+                let movingObject = {
+                    obj1: this.createLog('log' + (idx + 1) + '.png', log), x1: 0,
+                    obj2: this.createLog('log' + (idx + 1) + '.png', log), x2: 0
+                }
+                this.startMove(movingObject, (i * log.offset), log, Direction.RIGHT)
             }
         })
 
         this.turtles.forEach(turtle => {
             for (let i = 0; i < 3; i++) {
-                let turtles1 = this.createTurtles(turtle.type, turtle)
-                let turtles2 = this.createTurtles(turtle.type, turtle)
-
-                this.startMove(turtles1, turtles2, (i * turtle.offset), turtle, Direction.LEFT)
+                let movingObject = {
+                    obj1: this.createTurtles(turtle.type, turtle), x1: 0,
+                    obj2: this.createTurtles(turtle.type, turtle), x2: 0
+                }
+                this.startMove(movingObject, (i * turtle.offset), turtle, Direction.LEFT)
             }
         })
     }
 
-    //TODO create interface with 4 fields {obj1: HTML.., x1:number, obj2:HTML..., x2:number} and update this method signature
-    private startMove(obj1: HTMLImageElement, obj2: HTMLImageElement, offset: number, obj: Log | Turtles, direction: Direction) {
-        let objWidth = obj1.naturalWidth * -1;
-
+    private startMove(movingObject: MovingObject, offset: number, obj: Log | Turtles, direction: Direction) {
+        let objWidth = movingObject.obj1.naturalWidth * -1;
+        movingObject.x1 = objWidth + offset;
+        movingObject.x2 = obj.border + offset;
         window.requestAnimationFrame(() =>
-            this.moveObj(objWidth + offset, obj.border + offset, obj1, obj2, objWidth, obj, direction))
+            this.moveObj(movingObject, objWidth, obj, direction))
     }
 
-    private moveObj(a: number, b: number, obj1: HTMLImageElement, obj2: HTMLImageElement,
-                    objWidth: number, obj: Log | Turtles, direction: Direction) {
+    private moveObj(movingObject: MovingObject, objWidth: number, obj: Log | Turtles, direction: Direction) {
         if (direction == Direction.RIGHT) {
-            obj1.style.left = a + 'px'
-            obj2.style.left = b + 'px'
+            movingObject.obj1.style.left = movingObject.x1 + 'px'
+            movingObject.obj2.style.left = movingObject.x2 + 'px'
         } else {
-            obj1.style.right = a + 'px'
-            obj2.style.right = b + 'px'
+            movingObject.obj1.style.right = movingObject.x1 + 'px'
+            movingObject.obj2.style.right = movingObject.x2 + 'px'
         }
 
-        if (a == obj.border)
-            b = objWidth;
+        if (movingObject.x1 == obj.border)
+            movingObject.x2 = objWidth;
 
-        if (b == obj.border)
-            a = objWidth;
+        if (movingObject.x2 == obj.border)
+            movingObject.x1 = objWidth;
 
-        a = a + obj.speed;
-        b = b + obj.speed;
-        window.requestAnimationFrame(() => this.moveObj(a, b, obj1, obj2, objWidth, obj, direction))
+        movingObject.x1 = movingObject.x1 + obj.speed;
+        movingObject.x2 = movingObject.x2 + obj.speed;
+        window.requestAnimationFrame(() => this.moveObj(movingObject, objWidth, obj, direction))
     }
 
     private createTurtles(type: number, turtles: Turtles): HTMLImageElement {

@@ -36,6 +36,27 @@ export default class Animations {
         }, 100)
     }
 
+    public static riverDeath(playerEl: HTMLElement): void {
+        let img = document.getElementById('player-img') as HTMLImageElement
+        playerEl.style.rotate = '0deg'
+        let style = getComputedStyle(playerEl)
+        let i = 0;
+
+        let interval = setInterval(() => {
+            img.src = '../resources/frog/splash/splash-' + i + '.png'
+            if (i == 0) {
+                playerEl.style.left = (parseInt(style.left) - 22) + 'px'
+                playerEl.style.bottom = (parseInt(style.bottom) + 18) + 'px'
+            } else if (i == 4) {
+                clearInterval(interval)
+                setTimeout(() => {
+                    img.src = '../resources/frog/frog1.png'
+                }, 1500)
+            }
+            i++;
+        }, 100)
+    }
+
     public static animateTurtles(turtles: HTMLImageElement, type: number): void {
         let c = 1;
         setInterval(() => {

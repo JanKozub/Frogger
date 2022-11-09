@@ -1,6 +1,7 @@
 import Movement from "./Movement";
 import Animations from "../Animations";
 import Scoreboard from "../Scoreboard";
+import {DeathType} from "../types/DeathType";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
@@ -20,17 +21,19 @@ export default class Player {
                 if (k.key === 'ArrowUp') this.movement.goUp();
                 else if (k.key === 'ArrowDown') this.movement.goDown();
                 else if (k.key === 'ArrowLeft') {
-                    if (parseInt(getComputedStyle(this.player).left) < -50) {
-                        this.killFrog();
+                    if (parseInt(getComputedStyle(this.player).left) < 0) {
+                        this.killFrog(DeathType.MAP_EXIT);
                     } else {
                         this.movement.goLeft()
                     }
                 } else if (k.key === 'ArrowRight') {
                     if (parseInt(getComputedStyle(this.player).left) > 954) {
-                        this.killFrog();
+                        this.killFrog(DeathType.MAP_EXIT);
                     } else {
                         this.movement.goRight()
                     }
+                } else {
+                    this.killFrog(DeathType.RIVER);
                 }
             }
         }
@@ -40,25 +43,17 @@ export default class Player {
         window.requestAnimationFrame(() => {
             let objects = this.getCollisionObject();
             objects.forEach((object) => {
-                if (this.doesObjectsCollide(this.player, object)) {
-                    if (object.className == 'car') {
-                        if (!this.movementLock) {
-                            this.killFrog()
+                if (!this.movementLock) {
+                    if (this.doesObjectsCollide(this.player, object)) {
+                        if (this.isObjectACar(object)) {
+                            this.killFrog(DeathType.ROAD)
+                        } else {
+                            this.moveFrogOnRiver(object);
                         }
                     } else {
-                        if (!this.movementLock) { //TODO move this code to another method and move if with movement lock before checking the class
-                            let data = object.className.split(' ')[1].split('-');
-                            let speed = parseFloat(data[1])
-                            if (data[0] == 'left') {
-                                this.player.style.left = (this.player.offsetLeft - (speed * 2)) + 'px'
-                            } else {
-                                this.player.style.left = (this.player.offsetLeft + (speed * 2)) + 'px'
-                            }
+                        if (this.isFrogOnRiver()) {
+                            this.killFrog(DeathType.RIVER); //TODO fix timing of death animation + make log detection before death
                         }
-                    }
-                } else {
-                    if (this.player.offsetTop < 330) {
-                        // this.killFrog(); //TODO frog unda wata
                     }
                 }
             })
@@ -66,9 +61,16 @@ export default class Player {
         })
     }
 
-    private killFrog(): void {
+    private killFrog(type: DeathType): void {
         this.movementLock = true;
-        Animations.roadDeath(this.player)
+        if (type == DeathType.ROAD) {
+            Animations.roadDeath(this.player)
+        } else if (type == DeathType.RIVER) {
+            Animations.riverDeath(this.player)
+        } else if (type == DeathType.MAP_EXIT) {
+            this.player.style.left = '-1000px'
+        }
+
         setTimeout(() => {
             this.movementLock = false;
             this.movement.resetFrog(this.player);
@@ -87,13 +89,31 @@ export default class Player {
         return objects;
     }
 
+    private moveFrogOnRiver(object: HTMLImageElement): void {
+        let data = object.className.split(' ')[1].split('-');
+        let speed = parseFloat(data[1])
+        if (data[0] == 'left') {
+            this.player.style.left = (this.player.offsetLeft - (speed * 2)) + 'px'
+        } else {
+            this.player.style.left = (this.player.offsetLeft + (speed * 2)) + 'px'
+        }
+    }
+
     private doesObjectsCollide(o1: HTMLElement, o2: HTMLElement): boolean {
         let o1B = o1.getBoundingClientRect();
         let o2B = o2.getBoundingClientRect();
         return !(o1B.top > o2B.bottom || o1B.right < o2B.left || o1B.bottom < o2B.top || o1B.left > o2B.right)
     }
 
+    private isObjectACar(obj: HTMLImageElement): boolean {
+        return obj.className == 'car';
+    }
+
+    private isFrogOnRiver(): boolean {
+        return this.player.offsetTop < 330;
+    }
+
     public setLockMovement(state: boolean): void {
-        this.movementLock = state; //TODO fix spam left button bug
+        this.movementLock = state;
     }
 }
