@@ -22,7 +22,7 @@ export default class Cars {
         })
     }
 
-    private move(a: number, car: HTMLElement, offset: number, speed: number, direction: Direction) {
+    private move(a: number, car: HTMLElement, offset: number, speed: number, direction: Direction) { //move by 5 px in original
         if (a + offset < -92)
             a = 1266 - offset;
 

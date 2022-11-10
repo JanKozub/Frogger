@@ -32,8 +32,6 @@ export default class Player {
                     } else {
                         this.movement.goRight()
                     }
-                } else {
-                    this.killFrog(DeathType.RIVER);
                 }
             }
         }
@@ -52,7 +50,7 @@ export default class Player {
                         }
                     } else {
                         if (this.isFrogOnRiver()) {
-                            this.killFrog(DeathType.RIVER); //TODO fix timing of death animation + make log detection before death
+                            // this.killFrog(DeathType.RIVER); //TODO fix timing of death animation + make log detection before death
                         }
                     }
                 }

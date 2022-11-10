@@ -33,6 +33,7 @@ export default class Movement {
     public goLeft() {
         let data = Movement.getPlayersHTML();
         data.img.src = '../resources/frog/frog2-move.png'
+        data.player.style.rotate = '0deg'
         data.player.style.width = '57px'
 
         this.animateAndMove(data, -17, 2)
@@ -41,6 +42,7 @@ export default class Movement {
     public goRight() {
         let data = Movement.getPlayersHTML();
         data.img.src = '../resources/frog/frog3-move.png'
+        data.player.style.rotate = '0deg'
         data.player.style.width = '57px'
 
         this.animateAndMove(data, 17, 3)
