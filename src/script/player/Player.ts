@@ -5,14 +5,14 @@ import {DeathType} from "../types/DeathType";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
-    private readonly player: HTMLElement;
+    private readonly player: HTMLImageElement;
     private movementLock = false;
     private movement: Movement;
     private life = 4
 
     constructor() {
         this.movement = new Movement(this);
-        this.player = document.getElementById('player')
+        this.player = document.getElementById('player') as HTMLImageElement
     }
 
     public startMovement(): void {
@@ -27,7 +27,7 @@ export default class Player {
                         this.movement.goLeft()
                     }
                 } else if (k.key === 'ArrowRight') {
-                    if (parseInt(getComputedStyle(this.player).left) > 954) {
+                    if (parseInt(getComputedStyle(this.player).left) > 920) {
                         this.killFrog(DeathType.MAP_EXIT);
                     } else {
                         this.movement.goRight()

@@ -1,12 +1,11 @@
 export default class Animations {
-    public static roadDeath(playerEl: HTMLElement): void {
-        let img = document.getElementById('player-img') as HTMLImageElement
+    public static roadDeath(playerEl: HTMLImageElement): void {
         playerEl.style.rotate = '0deg'
         let style = getComputedStyle(playerEl)
         let i = 0;
 
         let interval = setInterval(() => {
-            img.src = '../resources/frog/death-road/death-road-' + i + '.png'
+            playerEl.src = '../resources/frog/death-road/death-road-' + i + '.png'
 
             if (i == 0) {
                 playerEl.style.left = (parseInt(style.left) - 5) + 'px'
@@ -29,7 +28,7 @@ export default class Animations {
                 clearInterval(interval)
 
                 setTimeout(() => {
-                    img.src = '../resources/frog/frog1.png'
+                    playerEl.src = '../resources/frog/frog1.png'
                 }, 1500)
             }
             i++;

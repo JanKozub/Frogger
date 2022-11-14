@@ -1,5 +1,4 @@
 export default interface PlayerHTMLData {
-    player: HTMLElement,
-    img: HTMLImageElement,
+    player: HTMLImageElement,
     style: CSSStyleDeclaration
 }

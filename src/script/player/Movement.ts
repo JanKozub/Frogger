@@ -10,7 +10,7 @@ export default class Movement {
 
     public goUp(): void {
         let data = Movement.getPlayersHTML();
-        data.img.src = '../resources/frog/frog1-move.png'
+        data.player.src = '../resources/frog/frog1-move.png'
         data.player.style.rotate = 0 + 'deg'
         data.player.style.bottom = (parseInt(data.style.bottom) + 1) + 'px'
 
@@ -19,7 +19,7 @@ export default class Movement {
 
     public goDown() {
         let data = Movement.getPlayersHTML();
-        data.img.src = '../resources/frog/frog1-move.png'
+        data.player.src = '../resources/frog/frog1-move.png'
         if (parseInt(data.style.bottom) > 20) {
             data.player.style.rotate = 180 + 'deg'
             data.player.style.bottom = (parseInt(data.style.bottom) - 1) + 'px'
@@ -32,18 +32,20 @@ export default class Movement {
 
     public goLeft() {
         let data = Movement.getPlayersHTML();
-        data.img.src = '../resources/frog/frog2-move.png'
+        data.player.src = '../resources/frog/frog2-move.png'
         data.player.style.rotate = '0deg'
         data.player.style.width = '57px'
+        data.player.style.rotate = '0deg'
 
         this.animateAndMove(data, -17, 2)
     }
 
     public goRight() {
         let data = Movement.getPlayersHTML();
-        data.img.src = '../resources/frog/frog3-move.png'
+        data.player.src = '../resources/frog/frog3-move.png'
         data.player.style.rotate = '0deg'
         data.player.style.width = '57px'
+        data.player.style.rotate = '0deg'
 
         this.animateAndMove(data, 17, 3)
     }
@@ -63,7 +65,7 @@ export default class Movement {
 
             if (i == 4) {
                 data.player.style.width = '46px'
-                data.img.src = '../resources/frog/frog' + imgNum + '.png'
+                data.player.src = '../resources/frog/frog' + imgNum + '.png'
                 clearInterval(interval)
             }
             i++;
@@ -78,10 +80,9 @@ export default class Movement {
     }
 
     private static getPlayersHTML(): PlayerHTMLData {
-        let player = document.getElementById('player');
+        let player = document.getElementById('player') as HTMLImageElement;
         return {
             player: player,
-            img: document.getElementById('player-img') as HTMLImageElement,
             style: getComputedStyle(player)
         }
     }
