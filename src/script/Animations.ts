@@ -35,21 +35,21 @@ export default class Animations {
         }, 100)
     }
 
-    public static riverDeath(playerEl: HTMLElement): void {
-        let img = document.getElementById('player-img') as HTMLImageElement
+    public static riverDeath(playerEl: HTMLImageElement): void {
+        playerEl.src = '../resources/frog/splash/splash-' + 0 + '.png'
         playerEl.style.rotate = '0deg'
         let style = getComputedStyle(playerEl)
+        playerEl.style.left = (parseInt(style.left) - 22) + 'px'
+        playerEl.style.bottom = (parseInt(style.bottom) - 18) + 'px'
+        playerEl.style.width = '90px'
+        playerEl.style.height = '69px'
         let i = 0;
-
         let interval = setInterval(() => {
-            img.src = '../resources/frog/splash/splash-' + i + '.png'
-            if (i == 0) {
-                playerEl.style.left = (parseInt(style.left) - 22) + 'px'
-                playerEl.style.bottom = (parseInt(style.bottom) + 18) + 'px'
-            } else if (i == 4) {
+            playerEl.src = '../resources/frog/splash/splash-' + i + '.png'
+            if (i == 4) {
                 clearInterval(interval)
                 setTimeout(() => {
-                    img.src = '../resources/frog/frog1.png'
+                    playerEl.src = '../resources/frog/frog1.png'
                 }, 1500)
             }
             i++;

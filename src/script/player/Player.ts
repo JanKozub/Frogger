@@ -40,6 +40,8 @@ export default class Player {
     public enableCollision(): void {
         window.requestAnimationFrame(() => {
             let objects = this.getCollisionObject();
+            let isFrogMoving = false;
+            let isFrogOnRiver = false;
             objects.forEach((object) => {
                 if (!this.movementLock) {
                     if (this.doesObjectsCollide(this.player, object)) {
@@ -47,14 +49,19 @@ export default class Player {
                             this.killFrog(DeathType.ROAD)
                         } else {
                             this.moveFrogOnRiver(object);
+                            isFrogMoving = true;
                         }
                     } else {
                         if (this.isFrogOnRiver()) {
-                            // this.killFrog(DeathType.RIVER); //TODO fix timing of death animation + make log detection before death
+                            isFrogOnRiver = true; //TODO fix timing of death animation
                         }
                     }
                 }
             })
+
+            if (isFrogOnRiver && !isFrogMoving)
+                this.killFrog(DeathType.RIVER);
+
             window.requestAnimationFrame(() => this.enableCollision());
         })
     }
