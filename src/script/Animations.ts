@@ -28,7 +28,7 @@ export default class Animations {
                 clearInterval(interval)
 
                 setTimeout(() => {
-                    playerEl.src = '../resources/frog/frog1.png'
+                    playerEl.src = '../resources/frog/default/frog-forward.png'
                 }, 1500)
             }
             i++;
@@ -51,7 +51,7 @@ export default class Animations {
             if (i == 4) {
                 clearInterval(interval)
                 setTimeout(() => {
-                    playerEl.src = '../resources/frog/frog1.png'
+                    playerEl.src = '../resources/frog/default/frog-forward.png'
                 }, 1500)
             }
             i++;
