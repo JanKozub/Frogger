@@ -36,13 +36,15 @@ export default class Animations {
     }
 
     public static riverDeath(playerEl: HTMLImageElement): void {
-        playerEl.src = '../resources/frog/splash/splash-' + 0 + '.png'
+        playerEl.src = ''
         playerEl.style.rotate = '0deg'
+        playerEl.style.width = '90px'
+        playerEl.style.height = '69px'
         let style = getComputedStyle(playerEl)
         playerEl.style.left = (parseInt(style.left) - 22) + 'px'
         playerEl.style.bottom = (parseInt(style.bottom) - 18) + 'px'
-        playerEl.style.width = '90px'
-        playerEl.style.height = '69px'
+        playerEl.src = '../resources/frog/splash/splash-' + 0 + '.png'
+
         let i = 0;
         let interval = setInterval(() => {
             playerEl.src = '../resources/frog/splash/splash-' + i + '.png'
@@ -59,10 +61,7 @@ export default class Animations {
     public static animateTurtles(turtles: HTMLImageElement, type: number): void {
         let c = 1;
         setInterval(() => {
-            if (c == 5) {
-                c = 1;
-            }
-
+            if (c == 5) c = 1;
             turtles.src = '../resources/logs/turtle/turtle' + type + '' + c + '.png'
             c++;
         }, 200)
@@ -72,9 +71,7 @@ export default class Animations {
         let c = 0;
         car.src = '../resources/cars/car4/car42.png';
         setInterval(() => {
-            if (c == 3) {
-                c = 0;
-            }
+            if (c == 3) c = 0;
             car.src = '../resources/cars/car4/car4' + c + '.png';
             c++;
         }, 75)

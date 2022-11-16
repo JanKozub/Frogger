@@ -60,16 +60,15 @@ export default class Movement {
             } else {
                 data.player.style.left = (parseInt(data.style.left) + offset) + 'px'
             }
-            if (i == 3)
-                this.player.setLockMovement(false);
 
             if (i == 4) {
                 data.player.style.width = '46px'
                 data.player.src = '../resources/frog/frog' + imgNum + '.png'
+                this.player.setLockMovement(false);
                 clearInterval(interval)
             }
             i++;
-        }, 50)
+        }, 40)
     }
 
     public resetFrog(player:HTMLElement): void {

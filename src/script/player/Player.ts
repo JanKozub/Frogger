@@ -30,6 +30,7 @@ export default class Player {
                     if (parseInt(getComputedStyle(this.player).left) > 920) {
                         this.killFrog(DeathType.MAP_EXIT);
                     } else {
+
                         this.movement.goRight()
                     }
                 }
@@ -68,6 +69,7 @@ export default class Player {
 
     private killFrog(type: DeathType): void {
         this.movementLock = true;
+
         if (type == DeathType.ROAD) {
             Animations.roadDeath(this.player)
         } else if (type == DeathType.RIVER) {
