@@ -6,18 +6,14 @@ body {
     justify-content: center;
 }
 
+img {
+    position: absolute;
+}
+
 #main {
     position: absolute;
     overflow: hidden;
     top: 30px;
-}
-
-.car {
-    position: absolute;
-}
-
-.river-obj {
-    position: absolute;
 }
 
 #life-blocker {
@@ -31,9 +27,12 @@ body {
 #player {
     width: 46px;
     height: 33px;
-    /*background-color: red;*/
-    position: absolute;
     bottom: 66px;
     left: 500px;
     z-index: 100;
+}
+
+.finish-frog {
+    top: 0;
+    left: 0;
 }
