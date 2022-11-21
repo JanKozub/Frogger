@@ -20,20 +20,8 @@ export default class Player {
             if (!this.movementLock) {
                 if (k.key === 'ArrowUp') this.movement.goUp();
                 else if (k.key === 'ArrowDown') this.movement.goDown();
-                else if (k.key === 'ArrowLeft') {
-                    if (parseInt(getComputedStyle(this.player).left) < 0) {
-                        this.killFrog(DeathType.MAP_EXIT);
-                    } else {
-                        this.movement.goLeft()
-                    }
-                } else if (k.key === 'ArrowRight') {
-                    if (parseInt(getComputedStyle(this.player).left) > 920) {
-                        this.killFrog(DeathType.MAP_EXIT);
-                    } else {
-
-                        this.movement.goRight()
-                    }
-                }
+                else if (k.key === 'ArrowLeft') this.movement.goLeft()
+                else if (k.key === 'ArrowRight') this.movement.goRight()
             }
         }
     }
@@ -67,7 +55,7 @@ export default class Player {
         })
     }
 
-    private killFrog(type: DeathType): void {
+    killFrog(type: DeathType): void {
         this.movementLock = true;
 
         if (type == DeathType.ROAD) {

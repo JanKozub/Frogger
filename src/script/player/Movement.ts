@@ -1,5 +1,6 @@
 import Player from "./Player";
 import PlayerHTMLData from "../interfaces/PlayerHTMLData";
+import {DeathType} from "../types/DeathType";
 
 export default class Movement {
     private readonly player: Player;
@@ -50,7 +51,7 @@ export default class Movement {
         this.animateAndMove(data, 17, 'right')
     }
 
-    private animateAndMove(data: PlayerHTMLData, offset:number, type: string) {
+    private animateAndMove(data: PlayerHTMLData, offset: number, type: string) {
         this.player.setLockMovement(true);
         let i = 1;
 
@@ -65,13 +66,22 @@ export default class Movement {
                 data.player.style.width = '46px'
                 data.player.src = '../resources/frog/default/frog-' + type + '.png'
                 this.player.setLockMovement(false);
+
+                if (this.didPlayerExitMap(data)) {
+                    this.player.killFrog(DeathType.MAP_EXIT);
+                }
+
                 clearInterval(interval)
             }
             i++;
         }, 40)
     }
 
-    public resetFrog(player:HTMLElement): void {
+    private didPlayerExitMap(data: PlayerHTMLData): boolean {
+        return (parseInt(data.style.left) < 0) || (parseInt(data.style.left) > 920);
+    }
+
+    public resetFrog(player: HTMLElement): void {
         player.style.width = '46px'
         player.style.height = '33px'
         player.style.left = '500px'
