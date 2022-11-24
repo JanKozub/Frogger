@@ -46,4 +46,11 @@ export default class Timer {
             window.requestAnimationFrame(() => this.timeLoop());
         }
     }
+
+    public reset() {
+        this.time = 0;
+        this.timeCounter = 0;
+        this.barCounter = 0;
+        Scoreboard.setTimeBarProgress(0);
+    }
 }

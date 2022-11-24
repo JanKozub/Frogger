@@ -1,6 +1,7 @@
 import Player from "./Player";
 import PlayerHTMLData from "../interfaces/PlayerHTMLData";
 import {DeathType} from "../types/DeathType";
+import Scoreboard from "../UI/Scoreboard";
 
 export default class Movement {
     private readonly player: Player;
@@ -16,6 +17,7 @@ export default class Movement {
         data.player.style.bottom = (parseInt(data.style.bottom) + 1) + 'px'
 
         this.animateAndMove(data, 13, 'forward')
+        Scoreboard.addToScore(10)
     }
 
     public goDown() {

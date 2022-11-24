@@ -17,6 +17,8 @@ export class Main {
 
         let timer = new Timer(player);
         timer.start();
+
+        player.setTimer(timer)
     }
 }
 

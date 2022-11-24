@@ -2,13 +2,15 @@ import Movement from "./Movement";
 import Animations from "../UI/Animations";
 import Scoreboard from "../UI/Scoreboard";
 import {DeathType} from "../types/DeathType";
+import Timer from "../UI/Timer";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
     private readonly player: HTMLImageElement;
     private movementLock = false;
     private movement: Movement;
-    private life = 4
+    private life = 4;
+    private timer: Timer;
 
     constructor() {
         this.movement = new Movement(this);
@@ -71,6 +73,11 @@ export default class Player {
             this.movement.resetFrog(this.player);
 
             this.life = this.life - 1
+            if (this.life < 1) {
+                this.life = 4;
+                Scoreboard.resetScore();
+                this.timer.reset();
+            }
             Scoreboard.setLifeAmount(this.life)
         }, 2000)
     }
@@ -110,5 +117,9 @@ export default class Player {
 
     public setLockMovement(state: boolean): void {
         this.movementLock = state;
+    }
+
+    public setTimer(timer: Timer) {
+        this.timer = timer;
     }
 }
