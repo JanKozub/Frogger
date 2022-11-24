@@ -1,6 +1,6 @@
-import {Direction} from "./types/Direction";
-import Car from "./interfaces/Car";
-import Animations from "./Animations";
+import {Direction} from "../types/Direction";
+import Car from "../interfaces/Car";
+import Animations from "../UI/Animations";
 
 export default class Cars {
 

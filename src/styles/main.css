@@ -24,6 +24,14 @@ img {
     background-color: #000F00;
 }
 
+#time-blocker {
+    position: absolute;
+    bottom: 73px;
+    right: 21px;
+    height: 28px;
+    background-color: #000F00;
+}
+
 #player {
     width: 46px;
     height: 33px;

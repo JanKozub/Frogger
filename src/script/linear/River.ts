@@ -1,7 +1,7 @@
-import {Direction} from "./types/Direction";
-import Animations from "./Animations";
-import Log from "./interfaces/Log";
-import MovingObject from "./interfaces/MovingObject";
+import {Direction} from "../types/Direction";
+import Animations from "../UI/Animations";
+import Log from "../interfaces/Log";
+import MovingObject from "../interfaces/MovingObject";
 
 export default class River {
     private readonly log1: Log = {top: 112, offset: 360, border: 850, speed: 1, amount: 3}

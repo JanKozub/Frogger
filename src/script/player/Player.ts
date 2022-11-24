@@ -1,6 +1,6 @@
 import Movement from "./Movement";
-import Animations from "../Animations";
-import Scoreboard from "../Scoreboard";
+import Animations from "../UI/Animations";
+import Scoreboard from "../UI/Scoreboard";
 import {DeathType} from "../types/DeathType";
 
 export default class Player {

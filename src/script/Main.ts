@@ -1,7 +1,7 @@
-import Cars from "./Cars";
-import River from "./River";
+import Cars from "./linear/Cars";
+import River from "./linear/River";
 import Player from "./player/Player";
-import Timer from "./Timer";
+import Timer from "./UI/Timer";
 
 export class Main {
     constructor() {
@@ -15,7 +15,7 @@ export class Main {
         player.startMovement();
         player.enableCollision();
 
-        let timer = new Timer();
+        let timer = new Timer(player);
         timer.start();
     }
 }

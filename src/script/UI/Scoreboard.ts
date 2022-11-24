@@ -13,4 +13,9 @@ export default class Scoreboard {
         document.getElementById('fly-' + position)
             .style.visibility = state ? 'visible' : 'hidden'
     }
+
+    public static setTimeBarProgress(timeLeft: number) { //progress => 0-30s time left
+        let blocker = document.getElementById('time-blocker');
+        blocker.style.width = (timeLeft * 6) + 'px'
+    }
 }
