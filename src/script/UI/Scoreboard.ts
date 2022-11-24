@@ -18,4 +18,13 @@ export default class Scoreboard {
         let blocker = document.getElementById('time-blocker');
         blocker.style.width = (timeLeft * 6) + 'px'
     }
+
+    public static addToScore(amountToAdd: number) {
+        let score = document.getElementById('score');
+        score.innerText = String(parseInt(score.innerText) + amountToAdd);
+    }
+
+    public static resetScore() {
+        document.getElementById('score').innerText = '0';
+    }
 }

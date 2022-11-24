@@ -4,6 +4,31 @@ body {
     overflow: hidden;
     display: flex;
     justify-content: center;
+
+}
+
+h1 {
+    font-size: 27px;
+    font-family: main-font, serif;
+    transform: scale(1.5,1);
+    position: absolute;
+    color: #89d0ff;
+    user-select: none;
+}
+
+.lvl {
+    bottom: 21px;
+    left: 50px;
+}
+
+.score {
+    bottom: 21px;
+    right: 505px;
+}
+
+@font-face {
+    font-family: 'main-font';
+    src: url('./../../resources/regular.ttf') format('truetype');
 }
 
 img {
