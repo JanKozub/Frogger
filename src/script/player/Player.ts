@@ -15,9 +15,7 @@ export default class Player {
     constructor() {
         this.movement = new Movement(this);
         this.player = document.getElementById('player') as HTMLImageElement
-    }
 
-    public startMovement(): void {
         window.onkeydown = (k) => {
             if (!this.movementLock) {
                 if (k.key === 'ArrowUp') this.movement.goUp();
@@ -28,7 +26,7 @@ export default class Player {
         }
     }
 
-    public enableCollision(): void {
+    public checkCollision(): void {
         window.requestAnimationFrame(() => {
             let objects = this.getCollisionObject();
             let isFrogMoving = false;
@@ -53,7 +51,7 @@ export default class Player {
             if (isFrogOnRiver && !isFrogMoving)
                 this.killFrog(DeathType.RIVER);
 
-            window.requestAnimationFrame(() => this.enableCollision());
+
         })
     }
 
@@ -95,9 +93,9 @@ export default class Player {
         let data = object.className.split(' ')[1].split('-');
         let speed = parseFloat(data[1])
         if (data[0] == 'left') {
-            this.player.style.left = (this.player.offsetLeft - (speed * 2)) + 'px'
+            this.player.style.left = (this.player.offsetLeft - speed) + 'px'
         } else {
-            this.player.style.left = (this.player.offsetLeft + (speed * 2)) + 'px'
+            this.player.style.left = (this.player.offsetLeft + speed) + 'px'
         }
     }
 
@@ -112,7 +110,7 @@ export default class Player {
     }
 
     private isFrogOnRiver(): boolean {
-        return this.player.offsetTop < 330;
+        return this.player.offsetTop < 330 && this.player.offsetTop > 110;
     }
 
     public setLockMovement(state: boolean): void {
