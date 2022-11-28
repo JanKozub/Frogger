@@ -1,4 +1,4 @@
-import MovingObject from "../interfaces/MovingObject";
+import MovingObject from "../structure/MovingObject";
 
 export default class LogRow {
     private readonly top: number

@@ -1,9 +1,10 @@
 import Player from "./player/Player";
 import Timer from "./UI/Timer";
 import CarRow from "./linear/CarRow";
-import {Direction} from "./types/Direction";
+import {Direction} from "./structure/Direction";
 import LogRow from "./linear/LogRow";
 import TurtleRow from "./linear/TurtleRow";
+import RandomEvents from "./player/RandomEvents";
 
 export class Main {
     private readonly player: Player;
@@ -23,6 +24,8 @@ export class Main {
 
     private readonly turtles1: TurtleRow;
     private readonly turtles2: TurtleRow;
+
+    private readonly randomEvents:RandomEvents = new RandomEvents();
 
     constructor() {
         this.player = new Player();
@@ -66,6 +69,8 @@ export class Main {
             this.turtles2.moveTurtles();
 
             if (!this.timer.timerLock) this.timer.timeLoop();
+
+            this.randomEvents.drawChanceForBonusFly();
         }
 
         window.requestAnimationFrame((t) => this.mainLoop(t));

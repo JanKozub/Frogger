@@ -1,5 +1,5 @@
 import Player from "../player/Player";
-import {DeathType} from "../types/DeathType";
+import {DeathType} from "../structure/DeathType";
 import Scoreboard from "./Scoreboard";
 
 export default class Timer {

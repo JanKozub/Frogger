@@ -1,5 +1,5 @@
 import Animations from "../UI/Animations";
-import MovingObject from "../interfaces/MovingObject";
+import MovingObject from "../structure/MovingObject";
 
 export default class TurtleRow {
     private readonly top: number

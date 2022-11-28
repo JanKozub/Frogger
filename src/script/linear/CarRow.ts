@@ -1,4 +1,4 @@
-import {Direction} from "../types/Direction";
+import {Direction} from "../structure/Direction";
 import Animations from "../UI/Animations";
 
 export default class CarRow {
