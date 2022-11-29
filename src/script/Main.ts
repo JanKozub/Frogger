@@ -25,10 +25,11 @@ export class Main {
     private readonly turtles1: TurtleRow;
     private readonly turtles2: TurtleRow;
 
-    private readonly randomEvents:RandomEvents = new RandomEvents();
+    private readonly randomEvents:RandomEvents;
 
     constructor() {
         this.player = new Player();
+        this.randomEvents = new RandomEvents(this.player);
 
         this.timer = new Timer(this.player);
         this.player.setTimer(this.timer)
@@ -55,6 +56,7 @@ export class Main {
 
         if (this.previousTimeStamp !== timestamp) {
             this.player.checkCollision();
+            this.player.checkForFinish();
 
             this.pinkCar.move();
             this.orangeCar.move();

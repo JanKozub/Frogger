@@ -6,15 +6,17 @@ import Timer from "../UI/Timer";
 
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
-    private readonly player: HTMLImageElement;
+    public readonly playerEl: HTMLImageElement;
     private movementLock = false;
     private movement: Movement;
     private life = 4;
     private timer: Timer;
+    private offset: number[] = [80, 262, 443, 625, 807]
+    public finishFrogs: boolean[] = [false, false, false, false, false]
 
     constructor() {
         this.movement = new Movement(this);
-        this.player = document.getElementById('player') as HTMLImageElement
+        this.playerEl = document.getElementById('player') as HTMLImageElement
 
         window.onkeydown = (k) => {
             if (!this.movementLock) {
@@ -33,11 +35,11 @@ export default class Player {
             let isFrogOnRiver = false;
             objects.forEach((object) => {
                 if (!this.movementLock) {
-                    if (this.doesObjectsCollide(this.player, object)) {
+                    if (this.doesObjectsCollide(this.playerEl, object)) {
                         if (this.isObjectACar(object)) {
                             this.killFrog(DeathType.ROAD)
                         } else {
-                            this.moveFrogOnRiver(object);
+                            this.moveFrogOnRiver(object); //TODO fix wall kill move
                             isFrogMoving = true;
                         }
                     } else {
@@ -47,28 +49,42 @@ export default class Player {
                     }
                 }
             })
-
             if (isFrogOnRiver && !isFrogMoving)
                 this.killFrog(DeathType.RIVER);
-
-
         })
     }
 
-    killFrog(type: DeathType): void {
+    public checkForFinish() {
+        if (this.playerEl.offsetTop <= 106 && this.movementLock == false) {
+            for (let i = 0; i < 5; i++) {
+                if (this.isInSpot(i, this.playerEl)) {
+                    Scoreboard.toggleFinishFrog(i, true);
+                    this.finishFrogs[i] = true;
+                    this.movement.resetFrog();
+                    this.timer.reset();
+                }
+            }
+        }
+    }
+
+    public isInSpot(index: number, playerEl: HTMLImageElement) {
+        return playerEl.offsetLeft >= this.offset[index] - 5 && playerEl.offsetLeft <= this.offset[index] + 25;
+    }
+
+    public killFrog(type: DeathType): void {
         this.movementLock = true;
 
         if (type == DeathType.ROAD) {
-            Animations.roadDeath(this.player)
+            Animations.roadDeath(this.playerEl)
         } else if (type == DeathType.RIVER) {
-            Animations.riverDeath(this.player)
+            Animations.riverDeath(this.playerEl)
         } else if (type == DeathType.MAP_EXIT) {
-            this.player.style.left = '-1000px'
+            this.playerEl.style.left = '-1000px'
         }
 
         setTimeout(() => {
             this.movementLock = false;
-            this.movement.resetFrog(this.player);
+            this.movement.resetFrog();
 
             this.life = this.life - 1
             if (this.life < 1) {
@@ -77,7 +93,7 @@ export default class Player {
                 this.timer.reset();
             }
             Scoreboard.setLifeAmount(this.life)
-        }, 2000)
+        }, 3000)
     }
 
     private getCollisionObject(): HTMLImageElement[] {
@@ -93,9 +109,9 @@ export default class Player {
         let data = object.className.split(' ')[1].split('-');
         let speed = parseFloat(data[1])
         if (data[0] == 'left') {
-            this.player.style.left = (this.player.offsetLeft - speed) + 'px'
+            this.playerEl.style.left = (this.playerEl.offsetLeft - speed) + 'px'
         } else {
-            this.player.style.left = (this.player.offsetLeft + speed) + 'px'
+            this.playerEl.style.left = (this.playerEl.offsetLeft + speed) + 'px'
         }
     }
 
@@ -110,7 +126,7 @@ export default class Player {
     }
 
     private isFrogOnRiver(): boolean {
-        return this.player.offsetTop < 330 && this.player.offsetTop > 110;
+        return this.playerEl.offsetTop < 330 && this.playerEl.offsetTop >= 106;
     }
 
     public setLockMovement(state: boolean): void {

@@ -3,26 +3,28 @@ export default class Animations {
         playerEl.style.rotate = '0deg'
         let style = getComputedStyle(playerEl)
         let i = 0;
+        let left = parseInt(style.left);
+        let top = parseInt(style.top);
 
         let interval = setInterval(() => {
             playerEl.src = '../resources/frog/death-road/death-road-' + i + '.png'
 
             if (i == 0) {
-                playerEl.style.left = (parseInt(style.left) - 5) + 'px'
-                playerEl.style.bottom = (parseInt(style.bottom) - 1) + 'px'
+                left = left - 5
+                top = top + 1
                 playerEl.style.width = '56px'
                 playerEl.style.height = '34px'
             } else if (i == 2) {
-                playerEl.style.left = (parseInt(style.left) - 6) + 'px'
-                playerEl.style.bottom = (parseInt(style.bottom) - 3) + 'px'
+                left = left - 6
+                top = top + 3
                 playerEl.style.width = '68px'
                 playerEl.style.height = '40px'
-            } else if (i == 3 || i == 3) {
-                playerEl.style.left = (parseInt(style.left) - 6) + 'px'
+            } else if (i == 3) {
+                left = left - 6
                 playerEl.style.width = '80px'
             } else if (i == 4) {
-                playerEl.style.left = (parseInt(style.left) - 8) + 'px'
-                playerEl.style.bottom = (parseInt(style.bottom) - 16) + 'px'
+                left = left - 8
+                top = top - 16
                 playerEl.style.width = '97px'
                 playerEl.style.height = '66px'
                 clearInterval(interval)
@@ -31,6 +33,10 @@ export default class Animations {
                     playerEl.src = '../resources/frog/default/frog-forward.png'
                 }, 1500)
             }
+
+            playerEl.style.left = left + 'px'
+            playerEl.style.top = top + 'px'
+
             i++;
         }, 100)
     }

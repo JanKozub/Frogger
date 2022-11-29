@@ -14,7 +14,7 @@ export default class Movement {
         let data = Movement.getPlayersHTML();
         data.player.src = '../resources/frog/default/frog-forward-move.png'
         data.player.style.rotate = 0 + 'deg'
-        data.player.style.bottom = (parseInt(data.style.bottom) + 1) + 'px'
+        data.player.style.top = (data.player.offsetTop - 1) + 'px'
 
         this.animateAndMove(data, 13, 'forward')
         Scoreboard.addToScore(10)
@@ -23,9 +23,9 @@ export default class Movement {
     public goDown() {
         let data = Movement.getPlayersHTML();
         data.player.src = '../resources/frog/default/frog-forward-move.png'
-        if (parseInt(data.style.bottom) > 20) {
+        if (data.player.offsetTop < 689) {
             data.player.style.rotate = 180 + 'deg'
-            data.player.style.bottom = (parseInt(data.style.bottom) - 1) + 'px'
+            data.player.style.top = (data.player.offsetTop + 1) + 'px'
 
             this.animateAndMove(data, -13, 'forward')
         } else {
@@ -59,9 +59,18 @@ export default class Movement {
 
         let interval = setInterval(() => {
             if (type == 'forward') {
-                data.player.style.bottom = (parseInt(data.style.bottom) + offset) + 'px'
+                if (data.player.offsetTop - offset < 106) {
+                    for (let i = 0; i < 5; i++) {
+                        if (!this.player.isInSpot(i, data.player)) {
+                            data.player.style.top = '106px'
+                            this.player.killFrog(DeathType.ROAD)
+                        }
+                    }
+                } else{
+                    data.player.style.top = (data.player.offsetTop - offset) + 'px'
+                }
             } else {
-                data.player.style.left = (parseInt(data.style.left) + offset) + 'px'
+                data.player.style.left = (data.player.offsetLeft + offset) + 'px'
             }
 
             if (i == 4) {
@@ -70,7 +79,7 @@ export default class Movement {
                 this.player.setLockMovement(false);
 
                 if (this.didPlayerExitMap(data)) {
-                    this.player.killFrog(DeathType.MAP_EXIT);
+                    this.player.killFrog(DeathType.MAP_EXIT); //TODO reset time
                 }
 
                 clearInterval(interval)
@@ -80,14 +89,14 @@ export default class Movement {
     }
 
     private didPlayerExitMap(data: PlayerHTMLData): boolean {
-        return (parseInt(data.style.left) < 0) || (parseInt(data.style.left) > 920);
+        return data.player.offsetLeft < -23 || data.player.offsetLeft > 920;
     }
 
-    public resetFrog(player: HTMLElement): void {
-        player.style.width = '46px'
-        player.style.height = '33px'
-        player.style.left = '500px'
-        player.style.bottom = '66px'
+    public resetFrog(): void {
+        this.player.playerEl.style.width = '46px'
+        this.player.playerEl.style.height = '33px'
+        this.player.playerEl.style.left = '500px'
+        this.player.playerEl.style.top = '647px'
     }
 
     private static getPlayersHTML(): PlayerHTMLData {
