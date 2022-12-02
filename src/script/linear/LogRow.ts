@@ -26,7 +26,7 @@ export default class LogRow {
         }
     }
 
-    public moveLog(): void {
+    public move(): void {
         for (let i = 0; i < this.movingObjects.length; i++) {
             let movingObject = this.movingObjects[i];
 

@@ -57,18 +57,19 @@ export class Main {
         if (this.previousTimeStamp !== timestamp) {
             this.player.checkCollision();
             this.player.checkForFinish();
+            this.player.checkForMapExit();
 
             this.pinkCar.move();
             this.orangeCar.move();
             this.blueCar.move();
             this.yellowCar.move();
 
-            this.log1.moveLog();
-            this.log2.moveLog();
-            this.log3.moveLog();
+            this.log1.move();
+            this.log2.move();
+            this.log3.move();
 
-            this.turtles1.moveTurtles();
-            this.turtles2.moveTurtles();
+            this.turtles1.move();
+            this.turtles2.move();
 
             if (!this.timer.timerLock) this.timer.timeLoop();
 

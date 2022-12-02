@@ -29,7 +29,7 @@ export default class TurtleRow {
         }
     }
 
-    public moveTurtles(): void {
+    public move(): void {
         for (let i = 0; i < 3; i++) {
             let movingObject = this.movingObjects[i];
 

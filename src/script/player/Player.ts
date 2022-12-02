@@ -8,6 +8,7 @@ export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
     public readonly playerEl: HTMLImageElement;
     private movementLock = false;
+    public isFrogDead = false;
     private movement: Movement;
     private life = 4;
     private timer: Timer;
@@ -34,20 +35,22 @@ export default class Player {
             let isFrogMoving = false;
             let isFrogOnRiver = false;
             objects.forEach((object) => {
-                if (!this.movementLock) {
                     if (this.doesObjectsCollide(this.playerEl, object)) {
-                        if (this.isObjectACar(object)) {
+                        if (this.isObjectACar(object) && !this.isFrogDead) {
                             this.killFrog(DeathType.ROAD)
                         } else {
-                            this.moveFrogOnRiver(object); //TODO fix wall kill move
-                            isFrogMoving = true;
+                            if (!this.movementLock){
+                                this.moveFrogOnRiver(object);
+                                isFrogMoving = true;
+                            }
                         }
                     } else {
-                        if (this.isFrogOnRiver()) {
-                            isFrogOnRiver = true; //TODO fix timing of death animation
+                        if (!this.movementLock) {
+                            if (this.isFrogOnRiver()) {
+                                isFrogOnRiver = true; //TODO fix timing of death animation
+                            }
                         }
                     }
-                }
             })
             if (isFrogOnRiver && !isFrogMoving)
                 this.killFrog(DeathType.RIVER);
@@ -55,34 +58,53 @@ export default class Player {
     }
 
     public checkForFinish() {
-        if (this.playerEl.offsetTop <= 106 && this.movementLock == false) {
+        let top = parseInt(getComputedStyle(this.playerEl).top)
+
+        if (top <= 106 && !this.isFrogDead) {
+            let finished = false;
             for (let i = 0; i < 5; i++) {
-                if (this.isInSpot(i, this.playerEl)) {
+                if (this.isInSpot(i)) {
                     Scoreboard.toggleFinishFrog(i, true);
-                    this.finishFrogs[i] = true;
-                    this.movement.resetFrog();
-                    this.timer.reset();
+                    this.playerEl.style.left = '-1000px'
+
+                    setTimeout(() => {
+                        this.finishFrogs[i] = true;
+                        this.movement.resetFrog();
+                        this.timer.reset();
+                        finished = true;
+                    }, 1500)
                 }
+            }
+            if (!finished) {
+                this.killFrog(DeathType.ROAD)
             }
         }
     }
 
-    public isInSpot(index: number, playerEl: HTMLImageElement) {
-        return playerEl.offsetLeft >= this.offset[index] - 5 && playerEl.offsetLeft <= this.offset[index] + 25;
+    public checkForMapExit(): void {
+        if (parseInt(this.playerEl.style.left) < -23 || parseInt(this.playerEl.style.left) > 920)  {
+            this.killFrog(DeathType.MAP_EXIT)
+        }
+    }
+
+    private isInSpot(index: number) {
+        return this.playerEl.offsetLeft >= this.offset[index] - 5 && this.playerEl.offsetLeft <= this.offset[index] + 25;
     }
 
     public killFrog(type: DeathType): void {
         this.movementLock = true;
+        this.isFrogDead = true;
 
         if (type == DeathType.ROAD) {
             Animations.roadDeath(this.playerEl)
         } else if (type == DeathType.RIVER) {
-            Animations.riverDeath(this.playerEl)
+            Animations.riverDeath(this.playerEl) //TODO FIX
         } else if (type == DeathType.MAP_EXIT) {
             this.playerEl.style.left = '-1000px'
         }
 
         setTimeout(() => {
+            this.isFrogDead = false;
             this.movementLock = false;
             this.movement.resetFrog();
 
@@ -90,8 +112,8 @@ export default class Player {
             if (this.life < 1) {
                 this.life = 4;
                 Scoreboard.resetScore();
-                this.timer.reset();
             }
+            this.timer.reset();
             Scoreboard.setLifeAmount(this.life)
         }, 3000)
     }
@@ -130,7 +152,9 @@ export default class Player {
     }
 
     public setLockMovement(state: boolean): void {
-        this.movementLock = state;
+        if (!this.isFrogDead) {
+            this.movementLock = state;
+        }
     }
 
     public setTimer(timer: Timer) {

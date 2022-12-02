@@ -7,38 +7,33 @@ export default class Animations {
         let top = parseInt(style.top);
 
         let interval = setInterval(() => {
-            playerEl.src = '../resources/frog/death-road/death-road-' + i + '.png'
-
             if (i == 0) {
-                left = left - 5
-                top = top + 1
-                playerEl.style.width = '56px'
-                playerEl.style.height = '34px'
+                left = left - 5;
+                top = top + 1;
+                playerEl.style.width = '56px';
+                playerEl.style.height = '34px';
             } else if (i == 2) {
-                left = left - 6
-                top = top + 3
-                playerEl.style.width = '68px'
-                playerEl.style.height = '40px'
+                left = left - 6;
+                top = top + 3;
+                playerEl.style.width = '68px';
+                playerEl.style.height = '40px';
             } else if (i == 3) {
-                left = left - 6
-                playerEl.style.width = '80px'
+                left = left - 6;
+                playerEl.style.width = '80px';
             } else if (i == 4) {
-                left = left - 8
-                top = top - 16
-                playerEl.style.width = '97px'
-                playerEl.style.height = '66px'
+                left = left - 8;
+                top = top - 16;
+                playerEl.style.width = '97px';
+                playerEl.style.height = '66px';
                 clearInterval(interval)
-
-                setTimeout(() => {
-                    playerEl.src = '../resources/frog/default/frog-forward.png'
-                }, 1500)
             }
 
-            playerEl.style.left = left + 'px'
-            playerEl.style.top = top + 'px'
+            playerEl.style.left = left + 'px';
+            playerEl.style.top = top + 'px';
+            playerEl.src = '../resources/frog/death-road/death-road-' + i + '.png';
 
             i++;
-        }, 100)
+        }, 150)
     }
 
     public static riverDeath(playerEl: HTMLImageElement): void {
