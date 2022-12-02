@@ -53,7 +53,7 @@ export default class Movement {
     }
 
     private animateAndMove(data: PlayerHTMLData, offset: number, type: string) {
-        this.player.setLockMovement(true);
+        this.player.setMovementLock(true);
         let i = 1;
 
         let interval = setInterval(() => {
@@ -69,7 +69,7 @@ export default class Movement {
                 if (i == 4) {
                     data.player.style.width = '46px'
                     data.player.src = '../resources/frog/default/frog-' + type + '.png'
-                    this.player.setLockMovement(false);
+                    this.player.setMovementLock(false);
                     clearInterval(interval)
                 }
                 i++;

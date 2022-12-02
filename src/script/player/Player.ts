@@ -7,7 +7,7 @@ import Timer from "../UI/Timer";
 export default class Player {
     private readonly COLLISION_CLASSES = ['car', 'river-obj'];
     public readonly playerEl: HTMLImageElement;
-    private movementLock = false;
+    public movementLock = false;
     public isFrogDead = false;
     private movement: Movement;
     private life = 4;
@@ -30,31 +30,26 @@ export default class Player {
     }
 
     public checkCollision(): void {
-        window.requestAnimationFrame(() => {
-            let objects = this.getCollisionObject();
-            let isFrogMoving = false;
-            let isFrogOnRiver = false;
-            objects.forEach((object) => {
-                    if (this.doesObjectsCollide(this.playerEl, object)) {
-                        if (this.isObjectACar(object) && !this.isFrogDead) {
-                            this.killFrog(DeathType.ROAD)
-                        } else {
-                            if (!this.movementLock){
-                                this.moveFrogOnRiver(object);
-                                isFrogMoving = true;
-                            }
-                        }
-                    } else {
-                        if (!this.movementLock) {
-                            if (this.isFrogOnRiver()) {
-                                isFrogOnRiver = true; //TODO fix timing of death animation
-                            }
-                        }
-                    }
-            })
-            if (isFrogOnRiver && !isFrogMoving)
-                this.killFrog(DeathType.RIVER);
+        let objects = this.getCollisionObject();
+        let isFrogMoving = false;
+        let isFrogOnRiver
+        objects.forEach((object) => {
+            if (this.doesObjectsCollide(this.playerEl, object)) {
+                if (this.isObjectACar(object) && !this.isFrogDead) {
+                    this.killFrog(DeathType.ROAD)
+                } else if (!this.movementLock) {
+                    this.moveFrogOnRiver(object);
+                    isFrogMoving = true;
+                }
+            } else {
+                if (this.isFrogOverRiver() && !this.movementLock) {
+                    isFrogOnRiver = true; //TODO fix timing of death animation
+                }
+            }
         })
+        if (isFrogOnRiver && !isFrogMoving && !this.movementLock) {
+            this.killFrog(DeathType.RIVER);
+        }
     }
 
     public checkForFinish() {
@@ -82,7 +77,7 @@ export default class Player {
     }
 
     public checkForMapExit(): void {
-        if (parseInt(this.playerEl.style.left) < -23 || parseInt(this.playerEl.style.left) > 920)  {
+        if (parseInt(this.playerEl.style.left) < -23 || parseInt(this.playerEl.style.left) > 920) {
             this.killFrog(DeathType.MAP_EXIT)
         }
     }
@@ -147,11 +142,11 @@ export default class Player {
         return obj.className == 'car';
     }
 
-    private isFrogOnRiver(): boolean {
+    private isFrogOverRiver(): boolean {
         return this.playerEl.offsetTop < 330 && this.playerEl.offsetTop >= 106;
     }
 
-    public setLockMovement(state: boolean): void {
+    public setMovementLock(state: boolean): void {
         if (!this.isFrogDead) {
             this.movementLock = state;
         }

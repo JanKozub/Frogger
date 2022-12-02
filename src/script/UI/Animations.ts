@@ -39,11 +39,10 @@ export default class Animations {
     public static riverDeath(playerEl: HTMLImageElement): void {
         playerEl.src = ''
         playerEl.style.rotate = '0deg'
+        playerEl.style.left = (parseInt(playerEl.style.left) - 22) + 'px'
+        playerEl.style.top = (parseInt(playerEl.style.top) - 18) + 'px'
         playerEl.style.width = '90px'
         playerEl.style.height = '69px'
-        let style = getComputedStyle(playerEl)
-        playerEl.style.left = (parseInt(style.left) - 22) + 'px'
-        playerEl.style.bottom = (parseInt(style.bottom) - 18) + 'px'
         playerEl.src = '../resources/frog/splash/splash-' + 0 + '.png'
 
         let i = 0;
@@ -51,9 +50,6 @@ export default class Animations {
             playerEl.src = '../resources/frog/splash/splash-' + i + '.png'
             if (i == 4) {
                 clearInterval(interval)
-                setTimeout(() => {
-                    playerEl.src = '../resources/frog/default/frog-forward.png'
-                }, 1500)
             }
             i++;
         }, 100)
