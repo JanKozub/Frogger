@@ -60,6 +60,7 @@ export default class Player {
             for (let i = 0; i < 5; i++) {
                 if (this.isInSpot(i)) {
                     Scoreboard.toggleFinishFrog(i, true);
+                    Scoreboard.addToScore(500);
                     this.playerEl.style.left = '-1000px'
 
                     setTimeout(() => {
